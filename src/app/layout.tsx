@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import QueryProvider from "@/components/Providers/QueryProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "IPN",
-  description: "ინტერპრესნიუსი",
+  description: "InterPressNews",
 };
 
 export default function RootLayout({
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ka">
-      <body>{children}</body>
+      <body>
+        <QueryProvider>{children}</QueryProvider>
+      </body>
     </html>
   );
 }

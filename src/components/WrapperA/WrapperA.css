@@ -1,0 +1,7 @@
+.wrapper-a {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 15px 0;
+  box-sizing: border-box;
+}

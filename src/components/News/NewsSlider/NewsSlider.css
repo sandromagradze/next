@@ -1,0 +1,193 @@
+.news-slider {
+  position: relative;
+  width: 247px;
+  height: 270px;
+  overflow: hidden;
+  padding: 0 0 0 17px;
+  box-sizing: border-box;
+  flex: 0 0 247px;
+  background: #fff;
+}
+
+/* =========================================================
+   LINK
+========================================================= */
+
+.news-slider__link {
+  display: block;
+  width: 230px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.news-slider__link:hover {
+  text-decoration: none;
+}
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+.news-slider__image {
+  position: relative;
+  width: 230px;
+  height: 130px;
+  overflow: hidden;
+  background: #f3f3f3;
+}
+
+.news-slider__image img {
+  display: block;
+  width: 230px;
+  height: 130px;
+  object-fit: cover;
+}
+
+/* =========================================================
+   TIME
+========================================================= */
+
+.news-slider__time {
+  display: block;
+  width: 230px;
+  height: 19px;
+  padding: 0 0 0 8px;
+  box-sizing: border-box;
+  font-size: 10px;
+  line-height: 19px;
+  color: #5a5a5a;
+}
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.news-slider__title {
+  width: 230px;
+  height: 65px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: #000;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* =========================================================
+   PAGINATION FRAME
+========================================================= */
+
+.news-slider__dots {
+  display: flex;
+  align-items: center;
+
+  width: 230px;
+  height: 26px;
+
+  margin: 10px 0 0 0;
+  padding: 3px 8px 3px 2px;
+
+  box-sizing: border-box;
+
+  background: #cccccc;
+
+  gap: 0;
+}
+
+/* =========================================================
+   DOT
+========================================================= */
+
+.news-slider__dot {
+  display: block;
+
+  width: 18px;
+  height: 18px;
+
+  flex: 0 0 18px;
+
+  margin: 0 1px 0 0;
+  padding: 0;
+
+  border: 1px solid transparent;
+
+  box-sizing: border-box;
+
+  background: transparent;
+
+  color: #424242;
+
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 400;
+
+  text-align: center;
+
+  cursor: pointer;
+}
+
+.news-slider__dot:hover,
+.news-slider__dot--active {
+  color: #1e5ba6;
+  border: 1px solid #1e5ba6;
+}
+
+.news-slider__dot:focus-visible {
+  outline: 2px solid #1e5ba6;
+  outline-offset: 1px;
+}
+
+/* =========================================================
+   ARROWS
+========================================================= */
+
+.news-slider__arrow {
+  position: static;
+
+  width: 18px;
+  height: 18px;
+
+  flex: 0 0 18px;
+
+  padding: 0;
+  margin: 0;
+
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+
+color: #424242;
+  font-size: 15px;
+  line-height: 16px;
+  font-weight: 400;
+
+  cursor: pointer;
+}
+
+.news-slider__arrow--prev {
+  margin-left: auto;
+}
+
+.news-slider__arrow--next {
+  margin-left: 1px;
+}
+
+.news-slider__arrow:hover {
+  color: #1e5ba6;
+  background: transparent;
+}
+
+.news-slider__arrow:focus-visible {
+  outline: 2px solid #1e5ba6;
+  outline-offset: 1px;
+}

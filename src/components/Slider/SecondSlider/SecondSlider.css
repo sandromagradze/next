@@ -1,0 +1,306 @@
+.second-slider {
+  width: 724px;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  margin-top: 40px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.second-slider__heading {
+  width: 724px;
+  height: 60px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0;
+  margin: 0;
+
+  box-sizing: border-box;
+}
+
+.second-slider__logo {
+  display: block;
+
+  width: 154px;
+  height: 52px;
+
+
+  object-fit: contain;
+
+  margin: 0 13px 0 0;
+  padding: 0 ;
+}
+
+.second-slider__heading-title {
+  display: block;
+
+  width: 280px;
+  height: 17px;
+
+  padding: 0;
+  margin: 6px 0 0;
+
+  color: #65a62c;
+
+  font-size: 16px;
+  line-height: 17px;
+
+  white-space: nowrap;
+
+  box-sizing: border-box;
+}
+
+/* =========================
+   MAIN SLIDER
+========================= */
+
+.second-slider__content {
+  width: 724px;
+  height: 206px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  padding: 0;
+  margin: 0;
+
+  box-sizing: border-box;
+}
+
+/* =========================
+   IMAGE
+========================= */
+
+.second-slider__image-link {
+  display: block;
+
+  width: 364px;
+  height: 206px;
+
+  flex: 0 0 364px;
+
+  padding: 0;
+  margin: 0;
+
+  text-decoration: none;
+}
+
+.second-slider__image {
+  width: 364px;
+  height: 206px;
+
+  background: #e8e8e8;
+
+  overflow: hidden;
+
+  padding: 0;
+  margin: 0;
+
+  box-sizing: border-box;
+}
+
+.second-slider__image-element {
+  display: block;
+
+  width: 364px;
+  height: 206px;
+
+  object-fit: cover;
+}
+
+/* =========================
+   RIGHT SIDE
+========================= */
+
+.second-slider__right {
+  width: 360px;
+  height: 206px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  padding: 0;
+  margin: 0;
+
+  box-sizing: border-box;
+}
+
+/* =========================
+   TEXT
+========================= */
+
+.second-slider__info {
+  width: 360px;
+  height: 166px;
+
+  padding: 20px 14px 0;
+
+  margin: 0;
+
+  box-sizing: border-box;
+}
+
+.second-slider__time {
+  display: block;
+
+  width: 332px;
+  height: 19px;
+
+  padding: 0 0 8px;
+  margin: 0;
+
+  box-sizing: border-box;
+
+  color: #5a5a5a;
+
+  font-size: 12px;
+  line-height: 11px;
+}
+
+.second-slider__title {
+  display: block;
+
+  width: 332px;
+  min-height: 72px;
+
+  padding: 0;
+  margin: 0;
+
+  color: #000000;
+
+  font-size: 16px;
+  line-height: 19.26px;
+
+  text-decoration: none;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+}
+
+.second-slider__title:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   CONTROLS
+========================= */
+
+.second-slider__controls {
+  width: 332px;
+  height: 40px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  padding: 0;
+  margin: 0 14px;
+
+  box-sizing: border-box;
+}
+
+.second-slider__pagination {
+  width: auto;
+  height: 20px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  padding: 0;
+  margin: 0 8px;
+
+  box-sizing: border-box;
+}
+
+.second-slider__dot {
+  width: 20px;
+  height: 20px;
+
+  flex: 0 0 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  margin: 0 4px;
+
+  border: 0;
+  border-radius: 0;
+
+  background: #9B9B9B;
+  color: #ffffff;
+
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+}
+
+.second-slider__dot--active {
+  background: #85d340;
+}
+
+/* =========================
+   ARROWS
+========================= */
+
+.second-slider__arrow {
+  width: 20px;
+  height: 20px;
+
+  flex: 0 0 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 3px 3px 3px;
+
+  border: 0;
+  border-radius: 0;
+
+  background: #9B9B9B;
+
+  color: #FFFFFF;
+
+  font-size: 24px;
+  line-height: 18px;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+}
+
+.second-slider__arrow:hover {
+  color: #4f861f;
+}
+
+.second-slider__arrow:focus-visible,
+.second-slider__dot:focus-visible,
+.second-slider__title:focus-visible,
+.second-slider__image-link:focus-visible {
+  outline: 2px solid #65a62c;
+  outline-offset: 2px;
+}
+.second-slider__separator{
+    margin-bottom: 20px;
+    border: 1.5px solid #e3e3e3;
+}

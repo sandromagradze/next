@@ -1,0 +1,355 @@
+.language-change-container {
+  position: relative;
+  display: inline-block;
+}
+
+.language-change-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+
+  padding: 6px 12px;
+
+  border: 0;
+  background: transparent;
+
+  color: #334155;
+
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+
+  cursor: pointer;
+}
+
+.language-change-button:hover {
+  color: #0f172a;
+}
+
+/* =========================
+   ARROW
+========================= */
+
+.language-change-arrow {
+  width: 12px;
+  height: 12px;
+
+  color: #64748b;
+
+  transition: transform 200ms ease;
+}
+
+.language-change-arrow-open {
+  transform: rotate(180deg);
+}
+
+/* =========================
+   DROPDOWN
+========================= */
+
+.language-change-menu {
+  position: absolute;
+
+  top: 100%;
+  right: 0;
+
+  width: 120px;
+
+  margin-top: 6px;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  box-shadow:
+    0 10px 25px
+      rgba(15, 23, 42, 0.12);
+
+  z-index: 50;
+}
+
+.language-change-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 8px 12px;
+
+  color: #475569;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  text-decoration: none;
+
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.language-change-item:hover {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.language-change-item-active {
+  background: #eff6ff;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.language-change-item-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.language-change-dot {
+  width: 6px;
+  height: 6px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #2563eb;
+}
+
+/* =========================
+   FLAGS
+========================= */
+
+.language-flag {
+  position: relative;
+
+  display: inline-block;
+
+  width: 22px;
+  height: 15px;
+
+  flex-shrink: 0;
+
+  overflow: hidden;
+
+  border-radius: 2px;
+
+  box-shadow:
+    0 0 0 1px
+      rgba(15, 23, 42, 0.12);
+
+  vertical-align: middle;
+}
+
+/* =========================
+   GEORGIAN FLAG
+========================= */
+
+.language-flag-georgia {
+  background: #ffffff;
+}
+
+/* Main Georgian cross */
+
+.georgia-cross {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  background: #d80027;
+
+  transform: translate(-50%, -50%);
+}
+
+.georgia-cross-horizontal {
+  width: 100%;
+  height: 4px;
+}
+
+.georgia-cross-vertical {
+  width: 4px;
+  height: 100%;
+}
+
+/* Four smaller crosses */
+
+.georgia-small-cross {
+  position: absolute;
+
+  width: 5px;
+  height: 5px;
+
+  background: #d80027;
+}
+
+.georgia-small-cross::before,
+.georgia-small-cross::after {
+  content: "";
+
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  background: #d80027;
+
+  transform: translate(-50%, -50%);
+}
+
+.georgia-small-cross::before {
+  width: 7px;
+  height: 1.5px;
+}
+
+.georgia-small-cross::after {
+  width: 1.5px;
+  height: 7px;
+}
+
+.georgia-small-cross-1 {
+  top: 3px;
+  left: 4px;
+}
+
+.georgia-small-cross-2 {
+  top: 3px;
+  right: 4px;
+}
+
+.georgia-small-cross-3 {
+  bottom: 3px;
+  left: 4px;
+}
+
+.georgia-small-cross-4 {
+  right: 4px;
+  bottom: 3px;
+}
+
+/* =========================
+   UNITED KINGDOM FLAG
+========================= */
+
+.language-flag-uk {
+  background: #1f3c88;
+}
+
+/* White diagonals */
+
+.uk-white-diagonal {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 140%;
+  height: 4px;
+
+  background: #ffffff;
+
+  transform-origin: center;
+}
+
+.uk-white-diagonal-1 {
+  transform: translate(-50%, -50%) rotate(34deg);
+}
+
+.uk-white-diagonal-2 {
+  transform: translate(-50%, -50%) rotate(-34deg);
+}
+
+/* Red diagonals */
+
+.uk-red-diagonal {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 140%;
+  height: 1.8px;
+
+  background: #c8102e;
+
+  transform-origin: center;
+}
+
+.uk-red-diagonal-1 {
+  transform: translate(-50%, -50%) rotate(34deg);
+}
+
+.uk-red-diagonal-2 {
+  transform: translate(-50%, -50%) rotate(-34deg);
+}
+
+/* White central cross */
+
+.uk-white-cross {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  background: #ffffff;
+
+  transform: translate(-50%, -50%);
+}
+
+.uk-white-cross-horizontal {
+  width: 100%;
+  height: 6px;
+}
+
+.uk-white-cross-vertical {
+  width: 6px;
+  height: 100%;
+}
+
+/* Red central cross */
+
+.uk-red-cross {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  background: #c8102e;
+
+  transform: translate(-50%, -50%);
+}
+
+.uk-red-cross-horizontal {
+  width: 100%;
+  height: 2.5px;
+}
+
+.uk-red-cross-vertical {
+  width: 2.5px;
+  height: 100%;
+}
+
+/* =========================
+   FALLBACK
+========================= */
+
+.language-flag-default {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 22px;
+  height: 15px;
+
+  font-size: 13px;
+
+  box-shadow: none;
+}

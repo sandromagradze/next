@@ -1,0 +1,51 @@
+#uparrow {
+  position: fixed;
+  right: 5%;
+  bottom: 5%;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 45px;
+  height: 45px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+#uparrow.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+#uparrow svg {
+  display: block;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}
+
+.st0 {
+  fill: #a5a5a5;
+}
+
+#uparrow:hover .st0 {
+  fill: #7a7a7a;
+}
+
+.st1 {
+  fill: #ffffff;
+}
+
+:not(svg) {
+  transform-origin: 0px 0px;
+}

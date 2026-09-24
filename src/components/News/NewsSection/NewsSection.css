@@ -1,0 +1,13 @@
+.news-section {
+  width: 724px;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.news-section__inner {
+  width: 724px;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}

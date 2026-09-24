@@ -1,0 +1,247 @@
+.home-page {
+  width: 100%;
+  background: #fff;
+  padding: 24px 0;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   TOP CONTENT
+   ========================================= */
+
+.home-page__top {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    270px
+    286px;
+
+  column-gap: 24px;
+
+  width: 100%;
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+  align-items: start;
+}
+
+/* =========================================
+   MAIN COLUMN
+   ========================================= */
+
+.home-page__main {
+  width: 100%;
+  min-width: 0;
+
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+/* =========================================
+   TOP SIDEBAR
+   ========================================= */
+
+.home-page__sidebar {
+  width: 270px;
+  min-width: 270px;
+
+  margin: 0;
+  padding: 0;
+  margin-top: 10px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  align-items: stretch;
+}
+
+/* =========================================
+   TOP AD
+   ========================================= */
+
+.home-page__ad {
+  width: 286px;
+  min-width: 286px;
+
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+
+  position: sticky;
+  top: 24px;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* =========================================
+   PROFILES
+   ========================================= */
+
+.home-page > * > .home-profile-section {
+  width: 100%;
+  margin-top: 24px;
+}
+
+/* =========================================
+   BOTTOM CONTENT
+   ========================================= */
+
+.home-page__bottom-content {
+  display: grid;
+
+  grid-template-columns:
+    723px
+    270px
+    1fr;
+
+  column-gap: 24px;
+
+  width: 100%;
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+  align-items: start;
+}
+
+/* =========================================
+   LATEST NEWS
+   ========================================= */
+
+.home-page__latest-news {
+  width: 723px;
+  min-width: 0;
+
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+/* =========================================
+   REMAINING CATEGORY BLOCKS
+   ========================================= */
+
+.home-page__remaining-blocks {
+  width: 270px;
+  min-width: 270px;
+
+  height: 2706.04px;
+
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+}
+
+/* =========================================
+   BOTTOM B3 AD
+   ========================================= */
+
+.home-page__bottom-ad {
+  width: 100%;
+  min-width: 0;
+
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+
+  position: sticky;
+  top: 24px;
+
+  align-self: start;
+}
+
+/* =========================================
+   RESPONSIVE — TABLET
+   ========================================= */
+
+@media (max-width: 1200px) {
+  .home-page__top {
+    grid-template-columns:
+      minmax(0, 1fr)
+      270px;
+
+    column-gap: 20px;
+  }
+
+  .home-page__ad {
+    display: none;
+  }
+
+  .home-page__bottom-content {
+    grid-template-columns:
+      minmax(0, 1fr)
+      270px;
+
+    column-gap: 20px;
+  }
+
+  .home-page__bottom-ad {
+    display: none;
+  }
+
+  .home-page__latest-news {
+    width: 100%;
+  }
+}
+
+/* =========================================
+   RESPONSIVE — MOBILE
+   ========================================= */
+
+@media (max-width: 768px) {
+  .home-page__top {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .home-page__main {
+    width: 100%;
+  }
+
+  .home-page__sidebar {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .home-page__ad {
+    display: none;
+  }
+
+  .home-page__bottom-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .home-page__latest-news {
+    width: 100%;
+  }
+
+  .home-page__remaining-blocks {
+    width: 100%;
+    min-width: 0;
+
+    height: auto;
+
+    overflow: visible;
+  }
+
+  .home-page__bottom-ad {
+    display: none;
+  }
+}

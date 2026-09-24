@@ -1,0 +1,54 @@
+.btu-ai-section {
+  width: 270px;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.btu-ai-block {
+  width: 270px;
+  padding: 0;
+  margin: 0 0 10px;
+  box-sizing: border-box;
+}
+
+.btu-ai-block__link {
+  display: block;
+  width: 100%;
+  color: #000;
+  text-decoration: none;
+}
+
+.btu-ai-content {
+  width: 100%;
+  background-color: #f5f5f5;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.btu-ai-time {
+  width: 100%;
+  padding: 0;
+  margin: 5px 0 10px 5px;
+  color: #5a5a5a;
+  font-size: 10px;
+  line-height: normal;
+  font-family: bpg_arialregular;
+  box-sizing: border-box;
+}
+
+.btu-ai-title {
+  width: auto;
+  padding: 0 0 10px;
+  margin: 0 5px 5px;
+  color: #000;
+  font-size: 13px;
+  line-height: normal;
+  font-family: bpg_arialregular;
+  box-sizing: border-box;
+}
+
+.btu-ai-block__link:hover {
+  text-decoration: none;
+}

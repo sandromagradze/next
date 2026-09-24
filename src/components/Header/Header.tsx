@@ -1,30 +1,90 @@
 "use client";
 
 import Link from "next/link";
-import LanguageChange from "@/components/LanguageChange/LanguageChange";
+
+import WrapperA from "@/components/WrapperA/WrapperA"
 import CurrencyTransfer from "@/components/CurrencyTransfer/CurrencyTransfer";
+import LanguageChange from "@/components/LanguageChange/LanguageChange";
+import SideBarAd from "@/components/Ads/SideBarAd";
+
+import "./Header.css";
+import WeatherInfo from "@/components/Weather/WeatherInfo";
 
 interface HeaderProps {
-  locale: string;
+  lang: string;
 }
 
-export default function Header({ locale }: HeaderProps) {
+export default function Header({
+  lang,
+}: HeaderProps) {
+  const handleLogoClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+  ) => {
+    const currentPath = window.location.pathname;
+    const homePath = `/${lang}`;
+
+    if (
+      currentPath === homePath ||
+      currentPath === `${homePath}/`
+    ) {
+      event.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
-    <header className="border-b border-gray-200">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-        <Link
-          href={`/${locale}`}
-          className="text-2xl font-bold"
+    
+    <header className="header">
+      <WrapperA> 
+      <div className="header__inner">
+        {/* LOGO */}
+        <div className="header__logo-wrapper">
+          <Link
+            href={`/${lang}`}
+            onClick={handleLogoClick}
+            aria-label="IPN"
+            className="header__logo-link"
+          >
+            <img
+              src="/logo.svg"
+              alt="IPN"
+              className="header__logo"
+            />
+          </Link>
+        </div>
+
+        {/* HEADER AD */}
+        <div
+          className="header__ad"
+          aria-label="Advertisement"
         >
-          IPN
-        </Link>
+          <SideBarAd
+            position="b5"
+            lang={lang}
+            className="flex-shrink-0"
+          />
+        </div>
 
-        <div className="flex items-center gap-6">
-          <CurrencyTransfer locale={locale} />
+        {/* RIGHT SIDE */}
+        <div className="header__right">
+          <CurrencyTransfer
+            lang={lang}
+          />
 
-          <LanguageChange locale={locale} />
+          <div className="header__language">
+            <LanguageChange
+              currentLanguage={lang}
+            />
+
+            <WeatherInfo lang={lang} />
+          </div>
         </div>
       </div>
+      </WrapperA>
     </header>
+    
   );
 }

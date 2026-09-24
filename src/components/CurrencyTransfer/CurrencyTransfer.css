@@ -1,0 +1,97 @@
+.curenncy {
+  width: 196px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0;
+  background: #ffffff;
+  font-size: 12px;
+}
+
+.curenncy__dates {
+  display: grid;
+  grid-template-columns: 48px 1fr 1fr;
+  align-items: center;
+  column-gap: 8px;
+  padding-bottom: 4px;
+}
+.curenncy__brand{
+
+
+
+
+      color: #85d340;
+      
+}
+
+.curenncy__date {
+  color: #777777;
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.curenncy__list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.curenncy__row {
+  display: grid;
+  grid-template-columns:48px 1fr 1fr;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.curenncy__code {
+  color: #555555;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.curenncy__rate {
+  color: #555555;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.curenncy__status {
+  grid-column: 1 / -1;
+  color: #999999;
+  font-size: 11px;
+  text-align: center;
+  padding: 4px 0;
+}
+
+.curenncy__status--error {
+  color: #dc2626;
+}
+
+@media (max-width: 900px) {
+  .curenncy {
+    width: 190px;
+  }
+
+  .curenncy__dates,
+  .curenncy__row {
+    grid-template-columns: 86px 1fr 1fr;
+  }
+
+  .curenncy__code,
+  .curenncy__rate {
+    font-size: 11px;
+  }
+
+  .curenncy__date {
+    font-size: 10px;
+  }
+}
