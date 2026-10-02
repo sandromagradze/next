@@ -6,18 +6,26 @@ import {
   fetchSliderNews,
   type SliderArticle,
 } from "@/lib/api/slider";
+import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
 export default function useSliderNews(
-  lang: string,
+  lang: SupportedLanguageCode,
+  initialArticles: SliderArticle[] = [],
 ) {
   return useQuery<SliderArticle[]>({
-    queryKey: ["sliderNews", lang],
+    queryKey: ["sliderNews", "production", lang],
     queryFn: () => fetchSliderNews(lang),
+    initialData:
+      initialArticles.length > 0
+        ? initialArticles
+        : undefined,
 
-    staleTime: 60 * 1000,
+    staleTime: 0,
     gcTime: 30 * 60 * 1000,
 
-    refetchOnWindowFocus: false,
+    refetchOnMount: "always",
+
+    refetchOnWindowFocus: true,
     retry: 1,
 
     enabled: Boolean(lang),

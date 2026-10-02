@@ -1,6 +1,6 @@
 .navbar {
   position: absolute;
-  top: 120px;
+  top: 125px;
   left: 0;
 
   width: 100%;
@@ -31,7 +31,7 @@
 
 .navbar--default {
   position: absolute;
-  top: 120px;
+  top: 125px;
   left: 0;
 
   width: 100%;
@@ -108,6 +108,7 @@
 ========================================================= */
 
 .navbar__logo-link {
+  position: relative;
   width: 70px;
   height: 27px;
 
@@ -131,6 +132,7 @@
 .navbar__logo-link--hidden {
   width: 0;
   flex-basis: 0;
+  margin-right: -14px;
 
   opacity: 0;
 
@@ -167,7 +169,7 @@
   display: flex;
   align-items: center;
 
-  gap: 16px;
+  gap: 20px;
 
   margin: 0;
   padding: 0;
@@ -194,15 +196,15 @@
 
   padding: 0;
 
-  color: #222;
+  color: #535353;
 
   background: transparent;
   border: 0;
 
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1;
+  font-family: bpg_banner_extrasquare_capsRg, Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 39px;
 
   text-decoration: none;
 
@@ -214,6 +216,16 @@
 .nav-link:hover {
   color: #1e5ba6;
   text-decoration: none;
+}
+
+.nav-link:focus-visible {
+  outline: 2px solid #1e5ba6;
+  outline-offset: 2px;
+}
+
+.navbar--home .navbar__menu .navitem:first-child .nav-link {
+  color: #1e5ba6;
+  box-shadow: inset 0 -2px 0 #1e5ba6;
 }
 
 /* =========================================================
@@ -312,6 +324,38 @@
 ========================================================= */
 
 @media (max-width: 900px) {
+  .navbar--default {
+    position: relative;
+    top: auto;
+    left: auto;
+  }
+
+  .navbar__left {
+    flex: 1 1 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .navbar__left::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navbar__menu {
+    min-width: max-content;
+  }
+
+  .navbar--default .more-dropdown {
+    position: fixed;
+    top: 159px;
+    right: 16px;
+  }
+
+  .navbar--stuck .more-dropdown {
+    position: fixed;
+    top: 39px;
+    right: 16px;
+  }
+
   .navbar__menu {
     gap: 12px;
   }
@@ -336,5 +380,62 @@
 
   .navbar__left {
     gap: 10px;
+  }
+}
+
+@media (max-width: 1230px) {
+  .navbar {
+    position: absolute;
+    top: 125px;
+    left: 0;
+    min-width: 1200px;
+  }
+
+  .navbar--default {
+    position: absolute;
+    top: 125px;
+    left: 0;
+  }
+
+  .navbar > .wrapper-a {
+    width: 1200px;
+    max-width: 1200px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .navbar__inner {
+    width: 1200px;
+  }
+
+  .navbar__left:has(.navbar__logo-link--hidden) {
+    gap: 0;
+  }
+
+  .navbar__left:has(.navbar__logo-link--hidden) .navbar__logo-link--hidden {
+    margin-right: 0;
+  }
+
+  .navbar__menu {
+    align-self: flex-start;
+    flex: 0 0 978px;
+    gap: 20px;
+    width: 978px;
+  }
+
+  .nav-link {
+    height: 39px;
+    color: #535353;
+    font-family: bpg_banner_extrasquare_capsRg, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 39px;
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar-sentinel,
+  .navbar {
+    display: none;
   }
 }

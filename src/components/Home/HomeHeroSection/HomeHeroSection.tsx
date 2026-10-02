@@ -1,14 +1,18 @@
 import SliderNews from "@/components/Slider/SliderNews/SliderNews";
 import SideBarAd from "@/components/Ads/SideBarAd";
+import type { SupportedLanguageCode } from "@/lib/api/i18n";
+import type { SliderArticle } from "@/lib/api/slider";
 
 import "./HomeHeroSection.css";
 
 interface HomeHeroSectionProps {
-  lang: string;
+  lang: SupportedLanguageCode;
+  initialArticles: SliderArticle[];
 }
 
 export default function HomeHeroSection({
   lang,
+  initialArticles,
 }: HomeHeroSectionProps) {
   return (
     <section
@@ -23,7 +27,11 @@ export default function HomeHeroSection({
       </h2>
 
       <div className="home-hero__slider">
-        <SliderNews lang={lang} />
+        <SliderNews
+          key={lang}
+          lang={lang}
+          initialArticles={initialArticles}
+        />
 
         <div className="home-hero__ad-container">
           <SideBarAd

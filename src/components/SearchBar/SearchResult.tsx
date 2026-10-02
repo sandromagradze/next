@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 interface SearchResultProps {
   search: string;
@@ -48,9 +50,6 @@ export default function SearchResult({
     const query = search.trim();
 
     if (query.length < 4) {
-      setResults([]);
-      setError("");
-      setLoading(false);
       return;
     }
 
@@ -145,7 +144,7 @@ export default function SearchResult({
       return url;
     }
 
-    return `https://www.interpressnews.ge${url}`;
+    return `/${lang}${url.startsWith("/") ? url : `/${url}`}`;
   };
 
   return (
@@ -176,19 +175,20 @@ export default function SearchResult({
             const imageUrl = getImageUrl(article.image);
 
             return (
-              <a
+              <Link
                 key={article.id}
                 href={getArticleUrl(article.url)}
                 className="search-result__item"
               >
                 {imageUrl && (
                   <div className="search-result__image-wrapper">
-                    <img
+                    <Image
                       src={imageUrl}
                       alt={article.title}
+                      width={90}
+                      height={60}
                       className="search-result__image"
-                      loading="lazy"
-                      decoding="async"
+                      sizes="90px"
                     />
                   </div>
                 )}
@@ -202,7 +202,7 @@ export default function SearchResult({
                     {article.publish_up}
                   </span>
                 </div>
-              </a>
+              </Link>
             );
           })}
         </div>

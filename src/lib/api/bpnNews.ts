@@ -1,3 +1,9 @@
+import type { SupportedLanguageCode } from "./i18n";
+import { sortByPublicationDate } from "./publicationDate";
+
+const API_BASE = "https://dev.ipn.ge";
+const HOMEPAGE_POSITION = "main_page_center_column";
+
 export interface BpnNewsImage {
   "170x96": string;
   "172x104": string;
@@ -13,7 +19,7 @@ export interface BpnNewsArticle {
   images: BpnNewsImage;
   link: string;
   original_image: string;
-  pubDate: string;
+  pubDate: string | null;
   title: string;
 }
 
@@ -33,16 +39,17 @@ interface BpnNewsResponse {
   blocks: BpnNewsBlock[];
 }
 
-export interface BpnNewsData {
-  articles: BpnNewsArticle[];
-  logo: string | null;
+export interface RssNewsData {
+  bpn: BpnNewsData;
+  sport: BpnNewsArticle[];
+  palitra: BpnNewsBlock | null;
 }
 
-export async function getBpnNews(
-  lang: string
-): Promise<BpnNewsData> {
+async function fetchRssBlocks(
+  lang: SupportedLanguageCode,
+): Promise<BpnNewsBlock[]> {
   const response = await fetch(
-    `https://dev.ipn.ge/${lang}/api/rss/collectors/fetch-active/`,
+    `${API_BASE}/${lang}/api/rss/collectors/fetch-active/`,
     {
       method: "POST",
       headers: {
@@ -50,20 +57,69 @@ export async function getBpnNews(
       },
       body: "",
       cache: "no-store",
-    }
+    },
   );
 
   if (!response.ok) {
     throw new Error(
-      `BPN news API error: ${response.status}`
+      `RSS collectors API error: ${response.status}`,
     );
   }
 
-  const data: BpnNewsResponse =
-    await response.json();
+  const data: BpnNewsResponse = await response.json();
 
-  const bpnBlock = data.blocks.find(
-    (block) => block.domain === "bpn.ge"
+  return data.blocks.map((block) => ({
+    ...block,
+    items: sortByPublicationDate(
+      block.items ?? [],
+      (item) => item.pubDate,
+    ),
+  }));
+}
+
+export async function getRssNews(
+  lang: SupportedLanguageCode,
+): Promise<RssNewsData> {
+  const blocks = await fetchRssBlocks(lang);
+  const bpnBlock = blocks.find(
+    (block) =>
+      block.domain === "bpn.ge" &&
+      block.position === HOMEPAGE_POSITION,
+  );
+  const sportBlock = blocks.find(
+    (block) =>
+      block.domain === "sportall.ge" &&
+      block.position === HOMEPAGE_POSITION,
+  );
+  const palitraBlock = blocks.find(
+    (block) =>
+      block.domain === "palitranews.ge" &&
+      block.position === HOMEPAGE_POSITION,
+  );
+
+  return {
+    bpn: {
+      articles: bpnBlock?.items ?? [],
+      logo: bpnBlock?.logo ?? null,
+    },
+    sport: sportBlock?.items.slice(0, 4) ?? [],
+    palitra: palitraBlock ?? null,
+  };
+}
+
+export interface BpnNewsData {
+  articles: BpnNewsArticle[];
+  logo: string | null;
+}
+
+export async function getBpnNews(
+  lang: SupportedLanguageCode,
+): Promise<BpnNewsData> {
+  const blocks = await fetchRssBlocks(lang);
+  const bpnBlock = blocks.find(
+    (block) =>
+      block.domain === "bpn.ge" &&
+      block.position === HOMEPAGE_POSITION,
   );
 
   if (!bpnBlock) {

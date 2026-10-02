@@ -1,4 +1,4 @@
-const API_BASE = "https://dev.ipn.ge";
+import type { SupportedLanguageCode } from "./i18n";
 
 export interface CategoryImage {
   original?: string;
@@ -39,19 +39,11 @@ interface CategoryBlocksResponse {
 }
 
 export async function fetchCategoryBlocks(
-  lang: string,
+  lang: SupportedLanguageCode,
 ): Promise<CategoryBlock[]> {
   const response = await fetch(
-    `${API_BASE}/${lang}/api/categoryblocks/`,
-    {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type":
-          "application/x-www-form-urlencoded",
-      },
-      body: "",
-    },
+    `/api/homepage-categoryblocks?lang=${lang}`,
+    { cache: "no-store" },
   );
 
   if (!response.ok) {

@@ -11,3 +11,11 @@ export const SUPPORTED_LANGUAGES = [
 
 export type SupportedLanguageCode =
   (typeof SUPPORTED_LANGUAGES)[number]["code"];
+
+export function isSupportedLanguageCode(
+  value: string,
+): value is SupportedLanguageCode {
+  return SUPPORTED_LANGUAGES.some(
+    ({ code }) => code === value,
+  );
+}

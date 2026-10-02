@@ -1,7 +1,8 @@
 .profile-card {
   flex: 0 0 211.59px;
   width: 211.59px;
-  height: 332px;
+  min-height: 332px;
+  height: auto;
   margin: 0 20px 0 0;
   padding: 20px 0;
   box-sizing: border-box;
@@ -80,9 +81,8 @@
 
 .profile-card__name {
   display: block;
-align-items: center;
-  width: 152px;
-  height: 17px;
+  width: 100%;
+  min-height: 17px;
 
   margin: 0;
   padding: 0 0 10px;
@@ -94,8 +94,7 @@ align-items: center;
   font-weight: 400;
 
   /* overflow: hidden; */
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
 
   unicode-bidi: isolate;
 }
@@ -104,8 +103,8 @@ align-items: center;
 
 .profile-card__position {
   display: block;
-  width: 157px;
-  height: 32px;
+  width: 100%;
+  min-height: 32px;
   margin: 6px 0 0;  
   padding: 0;
 
@@ -115,7 +114,7 @@ align-items: center;
   line-height: 16px;
   font-weight: 400;
 justify-content: center;
-  overflow: hidden;
+  overflow-wrap: anywhere;
   
 }
 
@@ -134,19 +133,18 @@ justify-content: center;
 }
 
 .profile-card__more-link {
-  display: table;
+  display: flex;
   align-items: center;
-  text-align: center;
-  position: relative;
-
+  justify-content: center;
+  gap: 8px;
+  width: max-content;
   height: 25px;
-
-  margin: 12px auto;
-  padding: 0 38px 0 12px;
+  margin: 12px auto 0;
+  padding: 0 12px;
 
   box-sizing: border-box;
 
-  line-height: 25px;
+  line-height: 1;
 
   background: #d6d6d6;
   border-radius: 3px 3px 0 0;
@@ -163,23 +161,14 @@ justify-content: center;
 /* მარჯვენა ისარი */
 
 .profile-card__more-link::after {
-  content: "";
-
-  position: absolute;
-
-  top: 8px;
-  right: 16px;
-
-  width: 11px;
-  height: 10px;
-
-  background-image: url("/static/img/sprite.png");
-  background-position: 0 -65px;
-  background-repeat: no-repeat;
+  content: "›";
+  font-size: 16px;
+  line-height: 1;
 }
 .profile-card__image-wrapper {
-  width: 211px;
-  height: 189px;
+  width: 100%;
+  min-height: 189px;
+  height: auto;
 
   padding: 0 0 10px;
   box-sizing: border-box;
@@ -194,8 +183,9 @@ justify-content: center;
 .profile-card__image {
   display: block;
 
-  width: 176px;
-  height: 176px;
+  width: min(176px, 100%);
+  height: auto;
+  aspect-ratio: 1;
 
   object-fit: cover;
   border-radius: 50%;

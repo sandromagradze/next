@@ -8,16 +8,19 @@ import {
 } from "react";
 
 import Link from "next/link";
+import Image from "next/image";
 
 import {
-  getLatestNewsPage,
+  getLatestNewsPageFromClient,
   type LatestNewsItem,
 } from "@/lib/api/latestNews";
+import type { SupportedLanguageCode } from "@/lib/api/i18n";
+import { sortByPublicationDate } from "@/lib/api/publicationDate";
 
 import "./LatestNews.css";
 
 interface LatestNewsProps {
-  lang: string;
+  lang: SupportedLanguageCode;
   initialArticles: LatestNewsItem[];
 }
 
@@ -121,7 +124,7 @@ export default function LatestNews({
           nextPageRef.current;
 
         const pageArticles =
-          await getLatestNewsPage(
+          await getLatestNewsPageFromClient(
             lang,
             page
           );
@@ -193,10 +196,14 @@ export default function LatestNews({
       }
 
       if (nextArticles.length > 0) {
-        setArticles((current) => [
-          ...current,
-          ...nextArticles,
-        ]);
+        setArticles((current) =>
+          sortByPublicationDate(
+            [...current, ...nextArticles],
+            (article) =>
+              article.pub_dt ||
+              article.publish_up,
+          ),
+        );
       }
 
       /*
@@ -290,16 +297,22 @@ export default function LatestNews({
             >
               <div className="latest-news__image-wrapper">
                 {article.image?.webp ? (
-                  <img
+                  <Image
                     src={article.image.webp}
                     alt={article.title}
+                    width={262}
+                    height={148}
                     className="latest-news__image"
+                    sizes="(max-width: 900px) 100vw, 262px"
                   />
                 ) : article.image?.original ? (
-                  <img
+                  <Image
                     src={article.image.original}
                     alt={article.title}
+                    width={262}
+                    height={148}
                     className="latest-news__image"
+                    sizes="(max-width: 900px) 100vw, 262px"
                   />
                 ) : (
                   <div className="latest-news__image-placeholder" />

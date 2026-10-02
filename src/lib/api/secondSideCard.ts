@@ -1,3 +1,5 @@
+import type { SupportedLanguageCode } from "./i18n";
+
 const API_BASE = "https://dev.ipn.ge";
 
 export interface SecondSideCardImage {
@@ -33,7 +35,7 @@ interface BlocksResponse {
 }
 
 export async function getSecondSideCard(
-  lang: string
+  lang: SupportedLanguageCode,
 ): Promise<SecondSideCardBlock | null> {
   const response = await fetch(
     `${API_BASE}/${lang}/api/blocks/`,
@@ -43,12 +45,12 @@ export async function getSecondSideCard(
         Accept: "application/json",
       },
       cache: "no-store",
-    }
+    },
   );
 
   if (!response.ok) {
     throw new Error(
-      `Blocks request failed: ${response.status}`
+      `Blocks request failed: ${response.status}`,
     );
   }
 
@@ -61,7 +63,7 @@ export async function getSecondSideCard(
         "mnishvnelovani-inpormacia" &&
       item.position ===
         "main_page_right_column" &&
-      item.visual === "vertical"
+      item.visual === "vertical",
   );
 
   return block ?? null;

@@ -3,9 +3,10 @@
 import { useEffect } from "react";
 
 import { fetchScripts } from "@/lib/api/scripts";
+import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
 interface GlobalScriptsProps {
-  lang: string;
+  lang: SupportedLanguageCode;
 }
 
 async function executeScripts(

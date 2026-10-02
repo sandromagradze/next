@@ -4,15 +4,17 @@ import NewsSlider from "../NewsSlider/NewsSlider";
 import SportSection from "../../SportSection/SportSection";
 
 import type { NewsSliderArticle } from "@/lib/api/newsSlider";
+import type { LatestNewsItem } from "@/lib/api/latestNews";
 import type { SportArticle } from "@/lib/api/sports";
+import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
 import "./NewsSection.css";
 
 interface NewsSectionProps {
   sliderArticles: NewsSliderArticle[];
-  cardArticles: NewsSliderArticle[];
+  cardArticles: LatestNewsItem[];
   sportArticles: SportArticle[];
-  lang: string;
+  lang: SupportedLanguageCode;
 }
 
 export default function NewsSection({
@@ -28,12 +30,14 @@ export default function NewsSection({
           <NewsSlider
             articles={sliderArticles}
             lang={lang}
+            eager
           />
 
           {cardArticles[0] && (
             <NewsCard
               article={cardArticles[0]}
               lang={lang}
+              eager
             />
           )}
 
@@ -41,6 +45,7 @@ export default function NewsSection({
             <NewsCard
               article={cardArticles[1]}
               lang={lang}
+              eager
             />
           )}
         </NewsRow>

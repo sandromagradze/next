@@ -27,6 +27,15 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "bpn.ge",
       },
+      {
+        protocol: "https",
+        hostname: "video.ambebi.ge",
+      },
+      {
+        protocol: "https",
+        hostname: "mshoblebi.ge",
+        pathname: "/media/**",
+      },
     ],
   },
 };

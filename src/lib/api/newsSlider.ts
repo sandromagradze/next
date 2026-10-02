@@ -1,3 +1,9 @@
+import type { SupportedLanguageCode } from "./i18n";
+import type { SliderArticle } from "./slider";
+
+const API_BASE = "https://www.interpressnews.ge";
+const SLIDER_API_BASE = "https://www.interpressnews.ge";
+
 export interface NewsSliderImage {
   original: string;
   thumb: string;
@@ -17,16 +23,21 @@ export interface NewsSliderArticle {
   video: unknown;
 }
 
+export interface NewsArticle extends NewsSliderArticle {
+  fulltext?: string;
+  categories?: { title?: string }[];
+}
+
 interface NewsSliderResponse {
-  top_big?: NewsSliderArticle[];
+  top_big?: SliderArticle[];
   top_small?: NewsSliderArticle[];
 }
 
 async function fetchSliderData(
-  lang: string
+  lang: SupportedLanguageCode,
 ): Promise<NewsSliderResponse> {
   const response = await fetch(
-    `https://dev.ipn.ge/${lang}/api/slider/`,
+    `${SLIDER_API_BASE}/${lang}/api/slider/`,
     {
       method: "POST",
       headers: {
@@ -34,142 +45,87 @@ async function fetchSliderData(
       },
       body: "",
       cache: "no-store",
-    }
+    },
   );
 
   if (!response.ok) {
     throw new Error(
-      `News slider API error: ${response.status}`
+      `News slider API error: ${response.status}`,
     );
   }
 
-  return response.json();
+  const data: NewsSliderResponse =
+    await response.json();
+
+  return data;
+}
+
+export async function getSliderContent(
+  lang: SupportedLanguageCode,
+): Promise<NewsSliderResponse> {
+  return fetchSliderData(lang);
 }
 
 export async function getNewsSliderArticles(
-  lang: string
+  lang: SupportedLanguageCode,
 ): Promise<NewsSliderArticle[]> {
-  const data = await fetchSliderData(lang);
+  const data = await getSliderContent(lang);
 
   return data.top_small ?? [];
 }
 
 export async function getSliderNewsArticles(
-  lang: string
-): Promise<NewsSliderArticle[]> {
-  const data = await fetchSliderData(lang);
+  lang: SupportedLanguageCode,
+): Promise<SliderArticle[]> {
+  const data = await getSliderContent(lang);
 
   return data.top_big ?? [];
 }
 
-/**
- * ერთი სტატიის წამოღება ID-ით
- *
- * მაგალითად:
- * /api/article/88/
- */
 async function fetchArticle(
-  lang: string,
-  id: number
-): Promise<NewsSliderArticle | null> {
+  lang: SupportedLanguageCode,
+  id: number,
+): Promise<NewsArticle | null> {
   const response = await fetch(
-    `https://dev.ipn.ge/${lang}/api/article/${id}/`,
+    `${API_BASE}/${lang}/api/article/${id}/`,
     {
       method: "GET",
       headers: {
         Accept: "*/*",
       },
       cache: "no-store",
-    }
+    },
   );
 
   if (!response.ok) {
     return null;
   }
 
-  return response.json();
-}
+  const data: unknown = await response.json();
 
-/**
- * შემდეგი სტატიის მოძებნა
- *
- * მაგალითად:
- * /api/article/88/next/
- */
-async function fetchNextArticle(
-  lang: string,
-  id: number
-): Promise<NewsSliderArticle | null> {
-  const response = await fetch(
-    `https://dev.ipn.ge/${lang}/api/article/${id}/next/`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "*/*",
-      },
-      cache: "no-store",
-    }
-  );
-
-  if (!response.ok) {
+  if (!data || typeof data !== "object") {
     return null;
   }
 
-  return response.json();
-}
+  const article = data as Partial<NewsArticle>;
 
-/**
- * NewsCard-ებისთვის სტატიების მოძებნა.
- *
- * პირველი სტატია:
- * /article/88/
- *
- * შემდეგ:
- * /article/{წინა სტატიის id}/next/
- *
- * და ასე შემდეგ.
- */
-export async function getNewsCardArticles(
-  lang: string
-): Promise<NewsSliderArticle[]> {
-  const articles: NewsSliderArticle[] = [];
-
-  const firstArticleId = 88;
-
-  const firstArticle = await fetchArticle(
-    lang,
-    firstArticleId
-  );
-
-  if (!firstArticle) {
-    return [];
-  }
-
-  articles.push(firstArticle);
-
-  let currentId = firstArticle.id;
-
-  const articlesToLoad = 8;
-
-  for (
-    let i = 1;
-    i < articlesToLoad;
-    i++
+  if (
+    typeof article.id !== "number" ||
+    !Number.isInteger(article.id) ||
+    article.id <= 0 ||
+    typeof article.title !== "string" ||
+    !article.title.trim()
   ) {
-    const nextArticle =
-      await fetchNextArticle(
-        lang,
-        currentId
-      );
-
-    if (!nextArticle) {
-      break;
-    }
-
-    articles.push(nextArticle);
-
-    currentId = nextArticle.id;
+    return null;
   }
 
-  return articles;
+  return article as NewsArticle;
 }
+
+export async function getArticleById(
+  lang: SupportedLanguageCode,
+  id: number,
+): Promise<NewsArticle | null> {
+  return fetchArticle(lang, id);
+}
+

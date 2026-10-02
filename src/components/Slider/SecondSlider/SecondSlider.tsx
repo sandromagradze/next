@@ -94,6 +94,7 @@ export default function SecondSlider({
             alt="BPN"
             width={154}
             height={52}
+            sizes="154px"
             className="second-slider__logo"
           />
         )}
@@ -117,6 +118,7 @@ export default function SecondSlider({
                 alt={article.title}
                 width={364}
                 height={206}
+                sizes="(max-width: 768px) 100vw, 364px"
                 className="second-slider__image-element"
               />
             )}

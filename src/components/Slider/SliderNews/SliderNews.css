@@ -1,9 +1,13 @@
 .slider-news-wrapper {
-  width: 724px;
+  --hero-text-track: 298px;
+  --hero-image-track: 418px;
+  --hero-column-gap: 16px;
+
+  display: block;
+  width: 723px;
   max-width: 100%;
   min-width: 0;
   padding-top: 12px;
-  display: block;
   unicode-bidi: isolate;
   outline: none !important;
   box-sizing: border-box;
@@ -11,7 +15,7 @@
 }
 
 .slider-news-wrapper--compact {
-  width: 724px;
+  width: 723px;
   max-width: 100%;
 }
 
@@ -43,12 +47,16 @@
 }
 
 .slider-pagination-wrapper {
+  grid-column: 2;
+  justify-self: end;
   display: flex;
   align-items: center;
   gap: 3px;
-  margin-top: 1rem;
-  margin-right: 40px;
-  justify-content: flex-end !important;
+  width: max-content;
+  max-width: none;
+  min-width: 0;
+  margin: 8px 8px 0;
+  box-sizing: border-box;
 }
 
 .slider-pagination-wrapper button {
@@ -109,15 +117,16 @@
 .slider-news-dots {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
   gap: 3px;
+  width: max-content;
 }
 
 .slider-news-dot {
   width: 23px;
   height: 23px;
   flex-shrink: 0;
-  font-size: 16px;
+  font-size:11px;
   line-height: 20px;
   font-weight: 600;
   border: none;
@@ -140,7 +149,12 @@
   color: #ffffff !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
+  .slider-news-wrapper {
+    --hero-text-track: minmax(0, 1fr);
+    --hero-image-track: minmax(0, 418px);
+  }
+
   .slider-news-wrapper {
     width: 100%;
   }
@@ -148,23 +162,43 @@
   .slider-news-wrapper--compact {
     width: 100%;
   }
+}
 
+@media (max-width: 700px) {
   .slider-pagination-wrapper {
-    margin-right: 0;
+    grid-column: 1;
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr) 22px;
+    width: 100%;
+    max-width: 418px;
+    gap: 4px;
+  }
+
+  .slider-pagination-wrapper > .slider-arrow-button:first-child {
+    grid-column: 1;
+  }
+
+  .slider-pagination-wrapper > .slider-arrow-button:last-child {
+    grid-column: 3;
   }
 
   .slider-news-dots {
-    gap: 8px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-column: 2;
+    grid-template-columns: repeat(auto-fit, 23px);
+    width: 100%;
+    min-width: 0;
   }
 }
 
 @media (max-width: 480px) {
   .slider-pagination-wrapper {
-    gap: 4px;
+    grid-template-columns: 22px minmax(0, 1fr) 22px;
+    column-gap: 4px;
   }
 
   .slider-news-dots {
+    grid-template-columns: repeat(auto-fit, 22px);
     gap: 4px;
   }
 

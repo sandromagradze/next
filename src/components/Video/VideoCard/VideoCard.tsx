@@ -1,19 +1,9 @@
 import "./VideoCard.css";
-
-interface PalitraNewsItem {
-  title: string;
-  link: string;
-  pubDate: string;
-  original_image?: string;
-  images?: {
-    "288x162"?: string;
-  };
-}
-
-interface PalitraNewsBlock {
-  title: string;
-  items: PalitraNewsItem[];
-}
+import Image from "next/image";
+import type {
+  PalitraNewsBlock,
+  PalitraNewsItem,
+} from "@/lib/api/palitraNews";
 
 interface VideoCardProps {
   lang: string;
@@ -70,9 +60,11 @@ export default function VideoCard({
 
         {/* HEADER */}
         <div className="palnewsliverss__header">
-          <img
+          <Image
             src="/palitranews.svg"
             alt="PalitraNews"
+            width={74}
+            height={31}
             className="palnewsliverss__logo"
           />
 
@@ -120,10 +112,12 @@ export default function VideoCard({
                   className="palnewsliverss__item"
                 >
                   {image && (
-                    <img
+                    <Image
                       src={image}
                       alt={item.title}
+                      fill
                       className="palnewsliverss__image"
+                      sizes="(max-width: 700px) 100vw, (max-width: 1200px) 50vw, 288px"
                     />
                   )}
 

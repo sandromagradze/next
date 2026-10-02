@@ -11,9 +11,10 @@
 }
 
 .palnewsliverss__wrapper {
- 
+  width: 100%;
   max-width: 1200px;
-    margin: 0 auto
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 /* HEADER */
@@ -33,7 +34,6 @@
   object-fit: contain;
   flex-shrink: 0;
   float:left;
-  width:auto;
     margin-right: 24px;
 }
 
@@ -77,17 +77,18 @@
 
 .palnewsliverss__content {
   width: 100%;
-  height: 336px;
+  height: auto;
   display: grid;
-  grid-template-columns: 600px 600px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0;
 }
 
 /* LIVE */
 
 .palnewsliverss__live {
-  width: 600px;
-  height: 336px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   background: #000;
   
@@ -104,11 +105,11 @@
 /* RIGHT GRID */
 
 .palnewsliverss__grid {
-  width: 600px;
-  height: 336px;
+  width: 100%;
+  height: auto;
   display: grid;
-  grid-template-columns: 288px 288px;
-  grid-template-rows: 162px 162px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, auto);
   column-gap: 24px;
   row-gap: 12px;
   padding-left: 24px;
@@ -120,8 +121,9 @@
 .palnewsliverss__item {
   position: relative;
   display: block;
-  width: 300px;
-  height: 162px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 288 / 162;
   overflow: hidden;
   background: #000;
   text-decoration: none;
@@ -130,7 +132,7 @@
 .palnewsliverss__image {
   display: block;
   width: 100%;
-  height: 162px;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -147,7 +149,7 @@
 }
 
 .palnewsliverss__item-title {
-  width: 268px;
+  width: 100%;
   height: 39px;
   overflow: hidden;
   color: #fff;
@@ -162,7 +164,9 @@
   .palnewsliverss__wrapper {
     padding: 0 15px;
   }
+}
 
+@media (max-width: 900px) {
   .palnewsliverss__content {
     height: auto;
     grid-template-columns: 1fr;
@@ -183,7 +187,7 @@
   }
 
   .palnewsliverss__item,
-  .palnewsliverss__image {
+  .palnewsliverss__item {
     width: 100%;
     height: auto;
     aspect-ratio: 288 / 162;
@@ -203,7 +207,10 @@
 
   .palnewsliverss__title {
     width: auto;
+    max-width: 100%;
     font-size: 20px;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 
   .palnewsliverss__label {

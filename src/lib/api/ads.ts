@@ -1,3 +1,5 @@
+import type { SupportedLanguageCode } from "./i18n";
+
 const API_BASE = "https://dev.ipn.ge";
 
 export interface AdItem {
@@ -10,7 +12,7 @@ export interface AdsResponse {
 }
 
 export async function fetchAds(
-  lang: string,
+  lang: SupportedLanguageCode,
 ): Promise<AdItem[]> {
   const response = await fetch(
     `${API_BASE}/${lang}/api/ads/`,

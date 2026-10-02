@@ -1,7 +1,14 @@
 .wrapper-a {
   width: 100%;
-  max-width: 1320px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 15px 0;
   box-sizing: border-box;
+}
+
+@media (max-width: 1230px) {
+  .wrapper-a {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
 }

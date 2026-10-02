@@ -1,3 +1,5 @@
+import type { SupportedLanguageCode } from "./i18n";
+
 const API_BASE_URL = "https://dev.ipn.ge";
 
 export interface ProfileImages {
@@ -33,7 +35,9 @@ interface ProfilesResponse {
   profiles: Profile[];
 }
 
-function getImageUrl(image?: string | null): string {
+function getImageUrl(
+  image?: string | null,
+): string {
   if (!image) {
     return "";
   }
@@ -49,7 +53,10 @@ function getImageUrl(image?: string | null): string {
   }
 
   if (src.startsWith("http://")) {
-    return src.replace(/^http:\/\//, "https://");
+    return src.replace(
+      /^http:\/\//,
+      "https://",
+    );
   }
 
   if (src.startsWith("/media/")) {
@@ -67,7 +74,9 @@ function getImageUrl(image?: string | null): string {
   return `${API_BASE_URL}/${src}`;
 }
 
-export function getProfileImage(profile: Profile): string {
+export function getProfileImage(
+  profile: Profile,
+): string {
   const image =
     profile.images?.["176x176"] ||
     profile.images?.["198x198"] ||
@@ -77,8 +86,8 @@ export function getProfileImage(profile: Profile): string {
 }
 
 export async function getProfiles(
-  lang: string,
-  page = 1
+  lang: SupportedLanguageCode,
+  page = 1,
 ): Promise<ProfilesResponse> {
   const response = await fetch(
     `${API_BASE_URL}/${lang}/api/profiles/`,
@@ -92,16 +101,15 @@ export async function getProfiles(
       body: new URLSearchParams({
         page: String(page),
       }).toString(),
-
       next: {
         revalidate: 60,
       },
-    }
+    },
   );
 
   if (!response.ok) {
     throw new Error(
-      `Profiles API error: ${response.status}`
+      `Profiles API error: ${response.status}`,
     );
   }
 
@@ -112,16 +120,19 @@ export async function getProfiles(
  * იღებს ყველა პროფილს ყველა გვერდიდან.
  */
 export async function getAllProfiles(
-  lang: string
+  lang: SupportedLanguageCode,
 ): Promise<Profile[]> {
-  const firstPage = await getProfiles(lang, 1);
+  const firstPage = await getProfiles(
+    lang,
+    1,
+  );
 
   const profiles = [
     ...(firstPage.profiles || []),
   ];
 
   const total =
-    firstPage.pagination?.total ||
+    firstPage.pagination?.total ??
     profiles.length;
 
   const pageSize =
@@ -135,9 +146,7 @@ export async function getAllProfiles(
     return profiles;
   }
 
-  const totalPages = Math.ceil(
-    total / pageSize
-  );
+  const totalPages = Math.ceil(total / pageSize);
 
   for (
     let page = 2;
@@ -146,11 +155,11 @@ export async function getAllProfiles(
   ) {
     const data = await getProfiles(
       lang,
-      page
+      page,
     );
 
     profiles.push(
-      ...(data.profiles || [])
+      ...(data.profiles || []),
     );
   }
 
@@ -161,8 +170,8 @@ export async function getAllProfiles(
  * ერთი კონკრეტული პროფილის მოძებნა.
  */
 export async function getProfileById(
-  lang: string,
-  id: string
+  lang: SupportedLanguageCode,
+  id: string,
 ): Promise<Profile | null> {
   const profiles =
     await getAllProfiles(lang);
@@ -170,7 +179,7 @@ export async function getProfileById(
   const profile = profiles.find(
     (item) =>
       String(item.id) === String(id) ||
-      item.alias === id
+      item.alias === id,
   );
 
   return profile || null;

@@ -34,7 +34,7 @@ function getProfileImage(
 
 export default function HomeProfileSection({
   localizedProfileCards,
-  totalCount = 212,
+  totalCount,
   lang,
 }: HomeProfileSectionProps) {
   /*
@@ -67,10 +67,10 @@ export default function HomeProfileSection({
           <ProfileCard
             key={profile.id}
             id={profile.id}
-            href={`/${lang}/profile`}
             image={getProfileImage(profile)}
             title={profile.title}
             position={profile.position}
+            lang={lang}
           />
         ))}
 
@@ -79,7 +79,7 @@ export default function HomeProfileSection({
           className="home-profile-section__all"
         >
           <span className="home-profile-section__all-count">
-            {totalCount}
+            {totalCount ?? localizedProfileCards.length}
           </span>
 
           <span className="home-profile-section__all-title">

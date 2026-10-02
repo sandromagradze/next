@@ -1,3 +1,9 @@
+import type { SupportedLanguageCode } from "./i18n";
+import { sortByPublicationDate } from "./publicationDate";
+
+const API_BASE = "https://dev.ipn.ge";
+const HOMEPAGE_POSITION = "main_page_center_column";
+
 export interface SportArticle {
   description: string;
   image: string;
@@ -32,10 +38,10 @@ interface SportResponse {
 }
 
 export async function getSportArticles(
-  lang: string
+  lang: SupportedLanguageCode,
 ): Promise<SportArticle[]> {
   const response = await fetch(
-    `https://dev.ipn.ge/${lang}/api/rss/collectors/fetch-active/`,
+    `${API_BASE}/${lang}/api/rss/collectors/fetch-active/`,
     {
       method: "POST",
       headers: {
@@ -43,24 +49,30 @@ export async function getSportArticles(
       },
       body: "",
       cache: "no-store",
-    }
+    },
   );
 
   if (!response.ok) {
     throw new Error(
-      `Sport RSS API error: ${response.status}`
+      `Sport RSS API error: ${response.status}`,
     );
   }
 
-  const data: SportResponse = await response.json();
+  const data: SportResponse =
+    await response.json();
 
   const sportBlock = data.blocks.find(
-    (block) => block.domain === "sportall.ge"
+    (block) =>
+      block.domain === "sportall.ge" &&
+      block.position === HOMEPAGE_POSITION,
   );
 
   if (!sportBlock) {
     return [];
   }
 
-  return sportBlock.items.slice(0, 4);
+  return sortByPublicationDate(
+    sportBlock.items,
+    (article) => article.pubDate,
+  ).slice(0, 4);
 }

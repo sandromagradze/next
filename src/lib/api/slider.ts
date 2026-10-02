@@ -1,4 +1,4 @@
-const API_BASE = "https://dev.ipn.ge";
+import type { SupportedLanguageCode } from "./i18n";
 
 export interface ArticleImage {
   original: string;
@@ -27,19 +27,12 @@ interface SliderResponse {
 }
 
 export async function fetchSliderNews(
-  lang: string,
+  lang: SupportedLanguageCode,
 ): Promise<SliderArticle[]> {
+  const params = new URLSearchParams({ lang });
   const response = await fetch(
-    `${API_BASE}/${lang}/api/slider/`,
-    {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type":
-          "application/x-www-form-urlencoded",
-      },
-      body: "loaded=0",
-    },
+    `/api/homepage-slider?${params.toString()}`,
+    { cache: "no-store" },
   );
 
   if (!response.ok) {

@@ -5,17 +5,20 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import type { NewsSliderArticle } from "@/lib/api/newsSlider";
+import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
 import "./NewsSlider.css";
 
 interface NewsSliderProps {
   articles: NewsSliderArticle[];
-  lang: string;
+  lang: SupportedLanguageCode;
+  eager?: boolean;
 }
 
 export default function NewsSlider({
   articles,
   lang,
+  eager = false,
 }: NewsSliderProps) {
   const slides = articles.slice(0, 5);
 
@@ -75,6 +78,8 @@ export default function NewsSlider({
               alt={currentArticle.title}
               width={230}
               height={130}
+              loading={eager ? "eager" : undefined}
+              sizes="(max-width: 768px) calc(100vw - 32px), 230px"
             />
           )}
         </div>

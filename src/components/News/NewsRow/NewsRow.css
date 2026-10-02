@@ -1,14 +1,21 @@
 .news-row {
-  width: 724px;
-  height: 306px;
+  width: 100%;
+  min-height: 306px;
+  height: auto;
   padding: 0;
   margin: 0;
 
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
 
   box-sizing: border-box;
   margin-top:20px;
+}
+
+@media (max-width: 768px) {
+  .news-row {
+    height: auto;
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

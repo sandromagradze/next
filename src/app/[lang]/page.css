@@ -3,6 +3,8 @@
   background: #fff;
   padding: 24px 0;
   box-sizing: border-box;
+  --home-layout-columns: minmax(0, 732fr) minmax(0, 234fr) minmax(0, 186fr);
+  --home-top-columns: 732px 234px minmax(0, 1fr);
 }
 
 /* =========================================
@@ -11,12 +13,9 @@
 
 .home-page__top {
   display: grid;
-  grid-template-columns:
-    minmax(0, 1fr)
-    270px
-    286px;
-
-  column-gap: 24px;
+  grid-template-columns: var(--home-top-columns);
+  column-gap: 15px;
+  row-gap: 0;
 
   width: 100%;
   margin: 0;
@@ -45,8 +44,8 @@
    ========================================= */
 
 .home-page__sidebar {
-  width: 270px;
-  min-width: 270px;
+  width: 100%;
+  min-width: 0;
 
   margin: 0;
   padding: 0;
@@ -66,8 +65,8 @@
    ========================================= */
 
 .home-page__ad {
-  width: 286px;
-  min-width: 286px;
+  width: 100%;
+  min-width: 0;
 
   margin: 0;
   padding: 0;
@@ -82,13 +81,21 @@
   align-items: flex-start;
 }
 
+.home-page__ad div,
+.home-page__ad iframe,
+.home-page__bottom-ad div,
+.home-page__bottom-ad iframe {
+  max-width: 100%;
+}
+
 /* =========================================
    PROFILES
    ========================================= */
 
-.home-page > * > .home-profile-section {
+.home-profile-section {
   width: 100%;
-  margin-top: 24px;
+  max-width: 1200px;
+  margin: 24px auto 0;
 }
 
 /* =========================================
@@ -97,11 +104,7 @@
 
 .home-page__bottom-content {
   display: grid;
-
-  grid-template-columns:
-    723px
-    270px
-    1fr;
+  grid-template-columns: var(--home-layout-columns);
 
   column-gap: 24px;
 
@@ -118,7 +121,7 @@
    ========================================= */
 
 .home-page__latest-news {
-  width: 723px;
+  width: 100%;
   min-width: 0;
 
   margin: 0;
@@ -132,17 +135,17 @@
    ========================================= */
 
 .home-page__remaining-blocks {
-  width: 270px;
-  min-width: 270px;
+  width: 100%;
+  min-width: 0;
 
-  height: 2706.04px;
+  height: auto;
 
   margin: 0;
   padding: 0;
 
   box-sizing: border-box;
 
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* =========================================
@@ -172,7 +175,7 @@
   .home-page__top {
     grid-template-columns:
       minmax(0, 1fr)
-      270px;
+      234px;
 
     column-gap: 20px;
   }
@@ -184,7 +187,7 @@
   .home-page__bottom-content {
     grid-template-columns:
       minmax(0, 1fr)
-      270px;
+      234px;
 
     column-gap: 20px;
   }
@@ -201,6 +204,21 @@
 /* =========================================
    RESPONSIVE — MOBILE
    ========================================= */
+
+@media (max-width: 1024px) {
+  .home-page__top {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-page__sidebar {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .home-page__ad {
+    display: none;
+  }
+}
 
 @media (max-width: 768px) {
   .home-page__top {

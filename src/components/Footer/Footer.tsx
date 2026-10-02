@@ -1,4 +1,6 @@
 import "./Footer.css";
+import Image from "next/image";
+import topge from "../../../public/topge.png";
 
 interface FooterProps {
   lang: string;
@@ -73,9 +75,13 @@ export default function Footer({ lang }: FooterProps) {
         <div className="footer-right">
           <div className="partner-logo">
             <span className="logo-placeholder">
-              <img
-                src="/topge.png"
+              <Image
+                src={topge}
                 alt="Top logo"
+                width={88}
+                height={30}
+                priority
+                className="footer__partner-logo"
               />
             </span>
           </div>

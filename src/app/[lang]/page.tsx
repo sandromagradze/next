@@ -9,23 +9,40 @@ import VideoCard from "@/components/Video/VideoCard/VideoCard";
 import LatestNews from "@/components/LatestNews/LatestNews";
 import Footer from "@/components/Footer/Footer";
 
-import {
-  getNewsCardArticles,
-  getNewsSliderArticles,
-} from "@/lib/api/newsSlider";
+import { getSliderContent } from "@/lib/api/newsSlider";
 
 import { getProfiles } from "@/lib/api/profiles";
-import { getSportArticles } from "@/lib/api/sports";
-import { getBpnNews } from "@/lib/api/bpnNews";
-import { getPalitraNews } from "@/lib/api/palitraNews";
-import { getLatestNews } from "@/lib/api/latestNews";
+import { getRssNews } from "@/lib/api/bpnNews";
+import {
+  getLatestNews,
+  getLatestNewsPage,
+} from "@/lib/api/latestNews";
+import { sortByPublicationDate } from "@/lib/api/publicationDate";
 
 import "./page.css";
 
+import type { SupportedLanguageCode } from "@/lib/api/i18n";
+import type { Metadata } from "next";
+import { HOME_SEO, localizedMetadata } from "@/lib/seo";
+
 interface HomePageProps {
   params: Promise<{
-    lang: string;
+    lang: SupportedLanguageCode;
   }>;
+}
+
+export async function generateMetadata({
+  params,
+}: HomePageProps): Promise<Metadata> {
+  const { lang } = await params;
+  const seo = HOME_SEO[lang];
+
+  return localizedMetadata(
+    lang,
+    "",
+    seo.title,
+    seo.description,
+  );
 }
 
 export default async function HomePage({
@@ -35,21 +52,53 @@ export default async function HomePage({
 
   const [
     profilesResponse,
-    smallSliderArticles,
-    cardArticles,
-    sportArticles,
-    bpnNews,
-    palitraNews,
+    sliderContent,
+    rssNews,
     latestNews,
   ] = await Promise.all([
     getProfiles(lang, 1),
-    getNewsSliderArticles(lang),
-    getNewsCardArticles(lang),
-    getSportArticles(lang),
-    getBpnNews(lang),
-    getPalitraNews(lang),
+    getSliderContent(lang),
+    getRssNews(lang),
     getLatestNews(lang, 15),
   ]);
+
+  const [
+    smallSliderArticles,
+    heroArticles,
+  ] = [
+    sliderContent.top_small ?? [],
+    sliderContent.top_big ?? [],
+  ];
+
+  const editorialArticleIds = new Set([
+    ...heroArticles.map((article) => article.id),
+    ...smallSliderArticles.map((article) => article.id),
+  ]);
+
+  let cardCandidates = latestNews
+    .filter((article) => !editorialArticleIds.has(article.id))
+    ;
+
+  if (cardCandidates.length < 8) {
+    const nextPage = await getLatestNewsPage(lang, 2);
+    const uniqueNews = Array.from(
+      new Map(
+        [...latestNews, ...nextPage].map((article) => [
+          article.id,
+          article,
+        ]),
+      ).values(),
+    );
+
+    cardCandidates = sortByPublicationDate(
+      uniqueNews,
+      (article) => article.pub_dt || article.publish_up,
+    ).filter(
+      (article) => !editorialArticleIds.has(article.id),
+    );
+  }
+
+  const localizedCardArticles = cardCandidates.slice(0, 8);
 
   const profiles = profilesResponse.profiles ?? [];
 
@@ -60,23 +109,25 @@ export default async function HomePage({
   return (
     <>
       <main className="home-page">
+        <h1 className="sr-only">{HOME_SEO[lang].title}</h1>
         <WrapperA>
           <div className="home-page__top">
             <div className="home-page__main">
               <HomeHeroSection
                 lang={lang}
+                initialArticles={heroArticles}
               />
 
               <NewsSection
                 sliderArticles={smallSliderArticles}
-                cardArticles={cardArticles}
-                sportArticles={sportArticles}
+                cardArticles={localizedCardArticles}
+                sportArticles={rssNews.sport}
                 lang={lang}
               />
 
               <SecondSlider
-                articles={bpnNews.articles}
-                logo={bpnNews.logo}
+                articles={rssNews.bpn.articles}
+                logo={rssNews.bpn.logo}
               />
             </div>
 
@@ -109,7 +160,7 @@ export default async function HomePage({
 
         <VideoCard
           lang={lang}
-          block={palitraNews}
+          block={rssNews.palitra}
         />
 
         <WrapperA>
@@ -117,7 +168,7 @@ export default async function HomePage({
             <section className="home-page__latest-news">
               <LatestNews
                 lang={lang}
-                initialArticles={latestNews}
+                initialArticles={latestNews.slice(0, 15)}
               />
             </section>
 

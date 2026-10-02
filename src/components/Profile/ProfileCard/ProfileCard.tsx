@@ -9,7 +9,6 @@ interface ProfileCardProps {
   title: string;
   position?: string;
   priority?: boolean;
-  href?: string;
   lang?: string;
 }
 
@@ -19,14 +18,12 @@ export default function ProfileCard({
   title,
   position,
   priority = false,
-  href,
   lang,
 }: ProfileCardProps) {
   const profileHref =
-    href ||
-    (lang
+    lang
       ? `/${lang}/profile/${id}`
-      : `/profile/${id}`);
+      : `/profile/${id}`;
 
   return (
     <article className="profile-card">
@@ -40,10 +37,10 @@ export default function ProfileCard({
       src={image}
       width={176}
       height={176}
+      sizes="176px"
       className="profile-card__image"
       alt={title}
       priority={priority}
-      unoptimized
     />
   ) : (
     <div
@@ -63,13 +60,12 @@ export default function ProfileCard({
           <p className="profile-card__position">
             {position || ""}
           </p>
-        </div>
 
-        <div className="profile-card__more">
           <span className="profile-card__more-link">
             გაიგე მეტი
           </span>
         </div>
+
       </Link>
     </article>
   );

@@ -1,14 +1,20 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
 
+import BtuAiSection from "@/components/BtuAi/BtuAiSection";
 import useCategoryBlocks from "@/components/hooks/useCategoryBlocks";
+import useRssBlocks from "@/components/hooks/useRssBlocks";
+
+import { getBtuAiArticles } from "@/lib/api/btuAi";
+import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
 import "./SideNewsCard.css";
 
 interface SideNewsCardProps {
-  lang: string;
+  lang: SupportedLanguageCode;
   blockAlias?: string;
   showRemaining?: boolean;
 }
@@ -45,10 +51,16 @@ function getImageUrl(
   }
 
   if (
-    src.startsWith("/media/__thumbs__/http://") ||
-    src.startsWith("/media/__thumbs__/https://")
+    src.startsWith(
+      "/media/__thumbs__/http://",
+    ) ||
+    src.startsWith(
+      "/media/__thumbs__/https://",
+    )
   ) {
-    return src.slice("/media/__thumbs__/".length);
+    return src.slice(
+      "/media/__thumbs__/".length,
+    );
   }
 
   if (
@@ -79,7 +91,11 @@ function getTime(article: {
   }
 
   if (value.includes("T")) {
-    return value.split("T")[1]?.slice(0, 5) ?? "";
+    return (
+      value
+        .split("T")[1]
+        ?.slice(0, 5) ?? ""
+    );
   }
 
   return value.slice(0, 5);
@@ -118,12 +134,28 @@ export default function SideNewsCard({
     isError,
   } = useCategoryBlocks(lang);
 
+  const {
+    data: rssBlocks = [],
+  } = useRssBlocks(lang);
+
+  const btuAiArticles = useMemo(
+    () => getBtuAiArticles(rssBlocks),
+    [rssBlocks],
+  );
+
+  /*
+   * showRemaining-ზე ვაჩვენებთ ყველა დარჩენილ
+   * CategoryBlock-ს, გარდა ინტერვიუსა და
+   * პრესის მიმოხილვისა, რადგან ისინი ცალკე
+   * SideNewsCard-ებით renderდება.
+   */
   const visibleBlocks = useMemo(() => {
     if (showRemaining) {
       return blocks.filter(
         (block) =>
           block.alias !== "interviu" &&
-          block.alias !== "presis-mimoxilva",
+          block.alias !==
+            "presis-mimoxilva",
       );
     }
 
@@ -141,7 +173,26 @@ export default function SideNewsCard({
     showRemaining,
   ]);
 
-  if (isLoading) {
+  /*
+   * ამ კომპონენტისთვის მიღებული block-ები
+   * renderდება ჩვეულებრივ.
+   */
+  const renderedBlocks = useMemo(() => {
+    if (!blockAlias) {
+      return visibleBlocks;
+    }
+
+    return visibleBlocks;
+  }, [
+    visibleBlocks,
+    blockAlias,
+  ]);
+
+  if (
+    isLoading &&
+    !renderedBlocks.length &&
+    !btuAiArticles.length
+  ) {
     return (
       <aside className="side-news-card">
         <div className="side-news-card__loading">
@@ -151,7 +202,11 @@ export default function SideNewsCard({
     );
   }
 
-  if (isError) {
+  if (
+    isError &&
+    !renderedBlocks.length &&
+    !btuAiArticles.length
+  ) {
     return (
       <aside className="side-news-card">
         <div className="side-news-card__error">
@@ -161,15 +216,20 @@ export default function SideNewsCard({
     );
   }
 
-  if (!visibleBlocks.length) {
+  if (
+    !renderedBlocks.length &&
+    !btuAiArticles.length
+  ) {
     return null;
   }
 
   return (
     <>
-      {visibleBlocks.map((block) => (
+      {renderedBlocks.map((block) => (
         <aside
-          key={block.id ?? block.alias}
+          key={
+            block.id ?? block.alias
+          }
           className="side-news-card"
         >
           <div className="side-news-card__title">
@@ -211,13 +271,11 @@ export default function SideNewsCard({
                     >
                       {imageUrl ? (
                         <div className="side-news-card__image-wrapper">
-                          <img
+                          <Image
                             src={imageUrl}
-                            alt={
-                              article.title
-                            }
-                            width={234}
-                            height={132}
+                            alt={article.title}
+                            fill
+                            sizes="(max-width: 900px) 100vw, 234px"
                             className="side-news-card__image"
                             loading="lazy"
                             decoding="async"
@@ -269,6 +327,21 @@ export default function SideNewsCard({
           </div>
         </aside>
       ))}
+
+      {/*
+       * BTU მხოლოდ პრესის მიმოხილვის შემდეგ.
+       *
+       * ეს კომპონენტი renderდება მხოლოდ მაშინ,
+       * როცა მიმდინარე SideNewsCard არის
+       * "presis-mimoxilva".
+       */}
+      {blockAlias ===
+        "presis-mimoxilva" &&
+        btuAiArticles.length > 0 && (
+          <BtuAiSection
+            articles={btuAiArticles}
+          />
+        )}
     </>
   );
 }

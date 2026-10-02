@@ -1,15 +1,17 @@
 .search-bar {
   position: relative;
-  width: 185px;
+  width: 206px;
+  height: 39px;
 }
 
 .search-bar-form {
   display: flex;
   align-items: center;
-  width: 185px;
-  height: 32px;
+  width: 206px;
+  height: 35px;
+  margin: 2px 0;
   box-sizing: border-box;
-  border: 1px solid #e3e3e3;
+  border: 1px solid #e2e2e2;
   border-radius: 1px;
   gap: 4px;
   padding: 0 8px;

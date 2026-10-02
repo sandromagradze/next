@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 import WrapperA from "@/components/WrapperA/WrapperA"
 import CurrencyTransfer from "@/components/CurrencyTransfer/CurrencyTransfer";
@@ -9,9 +10,10 @@ import SideBarAd from "@/components/Ads/SideBarAd";
 
 import "./Header.css";
 import WeatherInfo from "@/components/Weather/WeatherInfo";
+import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
 interface HeaderProps {
-  lang: string;
+  lang: SupportedLanguageCode;
 }
 
 export default function Header({
@@ -48,9 +50,11 @@ export default function Header({
             aria-label="IPN"
             className="header__logo-link"
           >
-            <img
+            <Image
               src="/logo.svg"
               alt="IPN"
+              width={150}
+              height={74}
               className="header__logo"
             />
           </Link>

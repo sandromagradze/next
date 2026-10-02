@@ -1,3 +1,5 @@
+import type { SupportedLanguageCode } from "./i18n";
+
 export interface MenuItem {
   alias: string;
   is_external: boolean;
@@ -13,7 +15,7 @@ export interface MenuResponse {
 const API_BASE = "https://dev.ipn.ge";
 
 export async function fetchMenu(
-  lang: string,
+  lang: SupportedLanguageCode,
 ): Promise<MenuResponse> {
   const response = await fetch(
     `${API_BASE}/${lang}/api/menu/`,

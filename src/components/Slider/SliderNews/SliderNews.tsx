@@ -1,15 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 import MainCard from "@/components/MainCard/MainCard";
 import useSliderNews from "@/components/hooks/useSliderNews";
+import type { SupportedLanguageCode } from "@/lib/api/i18n";
+import type { SliderArticle } from "@/lib/api/slider";
+import { stripHtml } from "@/lib/seo";
 
 import "./SliderNews.css";
 
 interface SliderNewsProps {
-lang: string;
+lang: SupportedLanguageCode;
 compact?: boolean;
+initialArticles?: SliderArticle[];
 }
 
 function getImageUrl(
@@ -51,7 +56,7 @@ lang: string,
 url: string,
 ): string {
 if (!url) {
-return `https://dev.ipn.ge/${lang}/`;
+return `/${lang}/`;
 }
 
 if (
@@ -61,26 +66,35 @@ url.startsWith("https://")
 return url;
 }
 
-return `https://dev.ipn.ge/${lang}${url.startsWith("/") ? url : `/${url}`}`;
+return `/${lang}${url.startsWith("/") ? url : `/${url}`}`;
+}
+
+function getPreviewText(value: string): string {
+return stripHtml(value)
+  .replace(/&nbsp;|&#160;/gi, " ")
+  .replace(/&ldquo;|&#8220;/gi, "\u201C")
+  .replace(/&rdquo;|&#8221;/gi, "\u201D")
+  .replace(/&lsquo;|&#8216;/gi, "\u2018")
+  .replace(/&rsquo;|&#8217;/gi, "\u2019")
+  .replace(/&quot;|&#34;/gi, '"')
+  .replace(/&apos;|&#39;/gi, "'")
+  .replace(/&amp;/gi, "&");
 }
 
 export default function SliderNews({
 lang,
 compact = false,
+initialArticles = [],
 }: SliderNewsProps) {
 const {
 data: articles = [],
 isLoading,
 isError,
 error,
-} = useSliderNews(lang);
+} = useSliderNews(lang, initialArticles);
 
 const [activeIndex, setActiveIndex] =
 useState(0);
-
-useEffect(() => {
-setActiveIndex(0);
-}, [lang]);
 
 useEffect(() => {
 if (articles.length <= 1) {
@@ -165,77 +179,74 @@ prev === articles.length - 1
 );
 };
 
+const pagination = articles.length > 1 ? (
+  <div
+    className="slider-pagination-wrapper"
+    aria-label="Slider controls"
+  >
+    <button
+      type="button"
+      onClick={handlePrev}
+      className="slider-arrow-button"
+      aria-label="Previous article"
+    >
+      <Image
+        src="/arrowleft.svg"
+        width={23}
+        height={23}
+        alt=""
+        aria-hidden="true"
+      />
+    </button>
+
+    <div className="slider-news-dots">
+      {articles.map((article, index) => (
+        <button
+          type="button"
+          key={article.id}
+          onClick={() => setActiveIndex(index)}
+          className={`slider-news-dot ${
+            index === safeActiveIndex
+              ? "slider-news-dot-active"
+              : ""
+          }`}
+          aria-label={`Go to article ${index + 1}`}
+          aria-current={
+            index === safeActiveIndex ? "true" : undefined
+          }
+        >
+          {index + 1}
+        </button>
+      ))}
+    </div>
+
+    <button
+      type="button"
+      onClick={handleNext}
+      className="slider-arrow-button"
+      aria-label="Next article"
+    >
+      <Image
+        src="/arrowright.svg"
+        width={23}
+        height={23}
+        alt=""
+        aria-hidden="true"
+      />
+    </button>
+  </div>
+) : null;
+
 return ( <div className={wrapperClassName}> <MainCard
      title={current.title}
      time={current.publish_up}
      image={imageUrl}
+     preview={getPreviewText(current.introtext)}
+     pagination={pagination}
      compact={compact}
      url={articleUrl}
+       priority={!compact}
    />
-
-  {articles.length > 1 && (
-    <div
-      className="slider-pagination-wrapper"
-      aria-label="Slider controls"
-    >
-      <button
-        type="button"
-        onClick={handlePrev}
-        className="slider-arrow-button"
-        aria-label="Previous article"
-      >
-        <img
-          src="/arrowleft.svg"
-          alt=""
-          aria-hidden="true"
-        />
-      </button>
-
-      <div className="slider-news-dots">
-        {articles.map(
-          (article, index) => (
-            <button
-              type="button"
-              key={article.id}
-              onClick={() =>
-                setActiveIndex(index)
-              }
-              className={`slider-news-dot ${
-                index ===
-                safeActiveIndex
-                  ? "slider-news-dot-active"
-                  : ""
-              }`}
-              aria-label={`Go to article ${
-                index + 1
-              }`}
-              aria-current={
-                index ===
-                safeActiveIndex
-                  ? "true"
-                  : undefined
-              }
-            >
-              {index + 1}
-            </button>
-          ),
-        )}
-      </div>
-
-      <button
-        type="button"
-        onClick={handleNext}
-        className="slider-arrow-button"
-        aria-label="Next article"
-      >
-        <img
-          src="/arrowright.svg"
-          alt=""
-          aria-hidden="true"
-        />
-      </button>
-    </div>
-  )}
 </div>
 
 );

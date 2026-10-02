@@ -7,6 +7,7 @@
 .home-hero__slider {
   width: 100%;
   min-width: 0;
+  
 
   display: flex;
   flex-direction: column;
@@ -26,25 +27,16 @@
   margin-left: auto !important;
   margin-right: auto !important;
 }
-.home-hero {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.home-hero__slider {
-  width: 100%;
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
 
 .home-hero__ad-container {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
+}
+
+.home-hero__ad-container :where(div, iframe, img, a) {
+  max-width: 100%;
   box-sizing: border-box;
 }

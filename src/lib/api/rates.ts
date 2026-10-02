@@ -1,3 +1,5 @@
+import type { SupportedLanguageCode } from "./i18n";
+
 const API_BASE = "https://dev.ipn.ge";
 
 export interface CurrencyDataset {
@@ -11,7 +13,7 @@ export interface CurrencyResponse {
 }
 
 export async function getRates(
-  langCode: string
+  langCode: SupportedLanguageCode,
 ): Promise<CurrencyResponse> {
   const response = await fetch(
     `${API_BASE}/${langCode}/api/rates/`,
@@ -21,14 +23,17 @@ export async function getRates(
         accept: "application/json",
       },
       body: "",
-    }
+    },
   );
 
   if (!response.ok) {
-    throw new Error(`HTTP error: ${response.status}`);
+    throw new Error(
+      `HTTP error: ${response.status}`,
+    );
   }
 
-  const data: CurrencyResponse = await response.json();
+  const data: CurrencyResponse =
+    await response.json();
 
   return data;
 }

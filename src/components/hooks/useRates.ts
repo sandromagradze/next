@@ -2,8 +2,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getRates, type CurrencyResponse } from "@/lib/api/rates";
+import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
-export default function useRates(lang: string) {
+export default function useRates(lang: SupportedLanguageCode) {
   return useQuery<CurrencyResponse>({
     queryKey: ["rates", lang],
     queryFn: () => getRates(lang),

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import useRates from "@/components/hooks/useRates";
+import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
 import "./CurrencyTransfer.css";
 
@@ -13,7 +14,7 @@ interface CurrencyRow {
 }
 
 interface CurrencyTransferComponentProps {
-  lang: string;
+  lang: SupportedLanguageCode;
 }
 
 interface CurrencyDates {
@@ -33,12 +34,9 @@ function getCurrencyDates(): CurrencyDates {
   const now = new Date();
 
   const currentDate = new Date(now);
-
   const previousDate = new Date(now);
 
-  previousDate.setDate(
-    previousDate.getDate() - 1,
-  );
+  previousDate.setDate(previousDate.getDate() - 1);
 
   return {
     previous: formatDate(previousDate),
@@ -47,39 +45,45 @@ function getCurrencyDates(): CurrencyDates {
 }
 
 function getCurrencyAmount(code: string): string {
-  return code.toUpperCase() === "RUB"
-    ? "100"
-    : "1";
+  return code.toUpperCase() === "RUB" ? "100" : "1";
 }
 
 export default function CurrencyTransfer({
   lang,
 }: CurrencyTransferComponentProps) {
-  const {
-    data,
-    isLoading,
-    isError,
-  } = useRates(lang);
+  const { data, isLoading, isError } = useRates(lang);
 
-  const [dates, setDates] =
-    useState<CurrencyDates | null>(null);
+  const [dates, setDates] = useState<CurrencyDates | null>(
+    null,
+  );
 
   useEffect(() => {
-    setDates(getCurrencyDates());
+    const timeout = window.setTimeout(() => {
+      setDates(getCurrencyDates());
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timeout);
+    };
   }, []);
 
-  const currencies: CurrencyRow[] =
-    (data?.dataset || []).map((currency) => ({
+  const currencies: CurrencyRow[] = (data?.dataset || []).map(
+    (currency) => ({
       code: currency.label,
       previousRate: currency.data[0],
       currentRate: currency.data[1],
-    }));
+    }),
+  );
 
   return (
     <div className="curenncy">
       <div className="curenncy__dates">
-        <Link href="https://bpn.ge" target="_blank" rel="noopener noreferrer"
-          className="curenncy__brand">
+        <Link
+          href="https://bpn.ge"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="curenncy__brand"
+        >
           bpn.ge
         </Link>
 
@@ -108,9 +112,7 @@ export default function CurrencyTransfer({
         {!isLoading &&
           !isError &&
           currencies.map((currency) => {
-            const amount = getCurrencyAmount(
-              currency.code,
-            );
+            const amount = getCurrencyAmount(currency.code);
 
             return (
               <div

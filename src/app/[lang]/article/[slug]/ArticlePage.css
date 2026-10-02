@@ -1,0 +1,259 @@
+.article-page {
+  width: 100%;
+  background: #fff;
+}
+
+.article-page__layout {
+  display: grid;
+  grid-template-columns: 724px minmax(0, 1fr);
+  column-gap: 18px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 0 70px;
+  box-sizing: border-box;
+}
+
+.article-page__article {
+  width: 724px;
+  min-width: 0;
+}
+
+.article-page__header {
+  width: 100%;
+  margin: 0;
+}
+
+.article-page__meta {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  height: 43px;
+}
+
+.article-page__category {
+  display: block;
+  flex: 0 0 89.3px;
+  box-sizing: border-box;
+  width: 89.3px;
+  margin: 0;
+  padding: 0 10px 0 0;
+  color: #424242;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.article-page__title {
+  margin: 0;
+  color: #1e5ba6;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 36px;
+  letter-spacing: 0;
+  padding: 0 0 15px;
+}
+
+.article-page__date {
+  display: block;
+  flex: 0 0 99.4px;
+  width: 99.4px;
+  margin: 0;
+  padding-top: 3px;
+  color: #5a5a5a;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.article-page__image-wrapper {
+  width: 724px;
+  height: auto;
+  margin: 0;
+  padding: 0 0 18px;
+  overflow: hidden;
+}
+
+.article-page__image {
+  display: inline;
+  width: 724px;
+  height: auto;
+}
+
+.article-page__body {
+  width: 724px;
+  box-sizing: border-box;
+  padding: 0 0 20px 56px;
+  color: #424242;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25.6px;
+}
+
+.article-page__body p {
+  margin: 0;
+  padding-bottom: 20px;
+}
+
+.article-page__body a {
+  color: #1e5ba6;
+  text-decoration: none;
+}
+
+.article-page__body a:hover {
+  text-decoration: underline;
+}
+
+.article-page__body strong,
+.article-page__body b {
+  font-weight: 700;
+}
+
+.article-page__body em,
+.article-page__body i {
+  font-style: italic;
+}
+
+.article-page__body ul,
+.article-page__body ol {
+  margin: 0 0 24px;
+  padding-left: 28px;
+}
+
+.article-page__body li {
+  margin-bottom: 8px;
+}
+
+.article-page__body blockquote {
+  margin: 28px 0;
+  padding: 16px 20px;
+  border-left: 4px solid #1e5ba6;
+  color: #444;
+  background: #f6f8fa;
+}
+
+.article-page__body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 28px auto;
+}
+
+.article-page__body iframe {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 28px auto;
+}
+
+.article-page__body h2,
+.article-page__body h3,
+.article-page__body h4 {
+  margin: 30px 0 16px;
+  color: #171717;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.article-page__body h2 {
+  font-size: 27px;
+}
+
+.article-page__body h3 {
+  font-size: 23px;
+}
+
+.article-page__body h4 {
+  font-size: 20px;
+}
+
+.article-page__body hr {
+  display: none;
+}
+
+@media (max-width: 1230px) {
+  .article-page > .wrapper-a {
+    width: 1200px;
+    max-width: 1200px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .article-page__layout {
+    width: 1200px;
+    max-width: 1200px;
+    padding-top: 47px;
+  }
+
+  .article-page__article {
+    width: 724px;
+  }
+
+  .article-sidebar {
+    width: 234px;
+  }
+}
+
+@media (max-width: 767px) {
+  .article-page__layout {
+    display: grid;
+    grid-template-columns: 724px minmax(0, 1fr);
+    column-gap: 18px;
+    padding: 0 0 10px;
+  }
+
+  .article-page__article {
+    width: 724px;
+  }
+
+  .article-page__meta {
+    height: 28px;
+    padding: 0 10px 10px;
+    box-sizing: border-box;
+  }
+
+  .article-page__category {
+    padding-right: 10px;
+  }
+
+  .article-page__date {
+    font-family: bpg_arialregular, Arial, Helvetica, sans-serif;
+  }
+
+  .article-page__title {
+    width: 724px;
+    padding: 0 10px 15px;
+    color: #000;
+    font-family: bpg_web_001, Arial, Helvetica, sans-serif;
+    font-size: 23px;
+    line-height: 34.5px;
+  }
+
+  .article-page__image-wrapper {
+    width: 724px;
+    height: auto;
+    aspect-ratio: auto;
+    padding-bottom: 18px;
+  }
+
+  .article-page__image {
+    width: 724px;
+    height: auto;
+  }
+
+  .article-page__body {
+    width: 724px;
+    padding: 0 10px 10px;
+    font-size: 18px;
+    line-height: 25.6px;
+  }
+
+  .article-page__body p {
+    margin: 0;
+    padding-bottom: 20px;
+  }
+
+  .article-sidebar {
+    width: 234px;
+  }
+}

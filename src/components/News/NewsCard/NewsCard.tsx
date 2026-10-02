@@ -1,18 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import type { NewsSliderArticle } from "@/lib/api/newsSlider";
+import type { LatestNewsItem } from "@/lib/api/latestNews";
+import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
 import "./NewsCard.css";
 
 interface NewsCardProps {
-  article: NewsSliderArticle;
-  lang: string;
+  article: LatestNewsItem;
+  lang: SupportedLanguageCode;
+  eager?: boolean;
 }
 
 export default function NewsCard({
   article,
   lang,
+  eager = false,
 }: NewsCardProps) {
   const imageUrl =
     article.image?.webp ||
@@ -36,6 +39,8 @@ export default function NewsCard({
               alt={article.title}
               width={230}
               height={130}
+              loading={eager ? "eager" : undefined}
+              sizes="(max-width: 768px) calc(100vw - 32px), 230px"
             />
           )}
         </div>

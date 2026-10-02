@@ -3,10 +3,11 @@
 import { useEffect, useRef } from "react";
 
 import useAds from "@/components/hooks/useAds";
+import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
 interface SideBarAdProps {
   position: string;
-  lang: string;
+  lang: SupportedLanguageCode;
   className?: string;
 }
 

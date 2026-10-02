@@ -1,3 +1,5 @@
+import type { SupportedLanguageCode } from "./i18n";
+
 const API_BASE = "https://dev.ipn.ge";
 
 export interface ScriptsResponse {
@@ -8,7 +10,7 @@ export interface ScriptsResponse {
 }
 
 export async function fetchScripts(
-  langCode: string,
+  langCode: SupportedLanguageCode,
 ): Promise<ScriptsResponse> {
   const response = await fetch(
     `${API_BASE}/${langCode}/api/scripts/`,

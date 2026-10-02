@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import SearchBar from "@/components/SearchBar/SearchBar";
@@ -20,6 +22,10 @@ export default function Navbar({
   menu,
 }: NavbarProps) {
   const [isStuck, setIsStuck] = useState(false);
+  const pathname = usePathname();
+  const isHomePage =
+    pathname === `/${lang}` ||
+    pathname === `/${lang}/`;
 
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
@@ -101,7 +107,7 @@ export default function Navbar({
           isStuck
             ? "navbar--stuck"
             : "navbar--default"
-        }`}
+        } ${isHomePage ? "navbar--home" : ""}`}
       >
         <WrapperA>
           <div className="navbar__inner">
@@ -116,9 +122,11 @@ export default function Navbar({
                 }`}
                 aria-label="IPN"
               >
-                <img
+                <Image
                   src="/logo.svg"
                   alt="IPN"
+                  width={150}
+                  height={74}
                   className="navbar__logo"
                 />
               </Link>
@@ -159,8 +167,10 @@ export default function Navbar({
                       className="nav-link more-button"
                       aria-label="More menu"
                     >
-                      <img
+                      <Image
                         src="/burger.svg"
+                        width={19}
+                        height={19}
                         alt=""
                         className="more-button__icon"
                       />

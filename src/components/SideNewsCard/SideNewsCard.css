@@ -2,7 +2,7 @@
   width: 100%;
 
   margin: 0;
-  padding: 0 18px;
+  padding: 0;
 
   box-sizing: border-box;
 
@@ -29,7 +29,7 @@
 
   font-size: 16px;
   line-height: 22px;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 /* =========================
@@ -90,6 +90,7 @@
    ========================= */
 
 .side-news-card__image-wrapper {
+  position: relative;
   width: 100%;
 
   aspect-ratio: 234 / 132;

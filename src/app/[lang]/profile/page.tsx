@@ -5,11 +5,28 @@ import {
   getAllProfiles,
   getProfileImage,
 } from "@/lib/api/profiles";
+import type { Profile } from "@/lib/api/profiles";
+import type { SupportedLanguageCode } from "@/lib/api/i18n";
+import type { Metadata } from "next";
+import { localizedMetadata } from "@/lib/seo";
 
 interface ProfilePageProps {
   params: Promise<{
-    lang: string;
+    lang: SupportedLanguageCode;
   }>;
+}
+
+export async function generateMetadata({
+  params,
+}: ProfilePageProps): Promise<Metadata> {
+  const { lang } = await params;
+  const title = lang === "en" ? "Profiles" : "პროფილები";
+  const description =
+    lang === "en"
+      ? "Profiles and biographies published by InterPressNews."
+      : "ინტერპრესნიუსის მიერ გამოქვეყნებული პროფილები და ბიოგრაფიები.";
+
+  return localizedMetadata(lang, "profile", title, description);
 }
 
 export default async function ProfilePage({
@@ -17,7 +34,7 @@ export default async function ProfilePage({
 }: ProfilePageProps) {
   const { lang } = await params;
 
-  let profiles = [];
+  let profiles: Profile[] = [];
 
   try {
     profiles = await getAllProfiles(lang);
@@ -32,7 +49,7 @@ export default async function ProfilePage({
     <main className="py-6">
       <WrapperA>
         <h1 className="text-3xl font-bold mb-6">
-          პროფილები
+          {lang === "en" ? "Profiles" : "პროფილები"}
         </h1>
 
         {profiles.length === 0 ? (

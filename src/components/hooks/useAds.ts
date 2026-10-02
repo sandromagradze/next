@@ -3,8 +3,9 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { fetchAds, type AdItem } from "@/lib/api/ads";
+import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
-export default function useAds(lang: string) {
+export default function useAds(lang: SupportedLanguageCode) {
   return useQuery<AdItem[]>({
     queryKey: ["ads", lang],
 

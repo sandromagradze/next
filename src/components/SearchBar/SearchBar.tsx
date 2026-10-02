@@ -30,7 +30,9 @@ export default function SearchBar({
     <div className="search-bar">
       <form onSubmit={handleSearch} className="search-bar-form">
         <input
-          type="text"
+          id="site-search"
+          name="search"
+          type="search"
           placeholder="ჩაწერეთ საძიებო სიტყვა"
           value={search}
           onChange={(e) => setSearch(e.target.value)}

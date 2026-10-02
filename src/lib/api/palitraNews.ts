@@ -1,4 +1,7 @@
+import type { SupportedLanguageCode } from "./i18n";
+
 const API_BASE = "https://dev.ipn.ge";
+const HOMEPAGE_POSITION = "main_page_center_column";
 
 export interface PalitraNewsItem {
   description: string;
@@ -34,7 +37,7 @@ interface RssCollectorsResponse {
 }
 
 export async function getPalitraNews(
-  lang: string
+  lang: SupportedLanguageCode
 ): Promise<PalitraNewsBlock | null> {
   const response = await fetch(
     `${API_BASE}/${lang}/api/rss/collectors/fetch-active/`,
@@ -59,7 +62,9 @@ export async function getPalitraNews(
 
   return (
     data.blocks.find(
-      (block) => block.domain === "palitranews.ge"
+      (block) =>
+        block.domain === "palitranews.ge" &&
+        block.position === HOMEPAGE_POSITION,
     ) ?? null
   );
 }
