@@ -118,7 +118,7 @@ export default function SecondSlider({
                 alt={article.title}
                 width={364}
                 height={206}
-                sizes="(max-width: 768px) 100vw, 364px"
+                sizes="(max-width: 768px) calc(100vw - 30px), (max-width: 1024px) calc((100vw - 30px) / 2), (max-width: 1200px) calc((100vw - 284px) / 2), 366px"
                 className="second-slider__image-element"
               />
             )}

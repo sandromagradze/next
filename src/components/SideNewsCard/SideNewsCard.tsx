@@ -142,6 +142,9 @@ export default function SideNewsCard({
     () => getBtuAiArticles(rssBlocks),
     [rssBlocks],
   );
+  const imageSizes = showRemaining
+    ? "(max-width: 768px) calc(100vw - 30px), (max-width: 1024px) 210px, 234px"
+    : "(max-width: 768px) calc(100vw - 30px), (max-width: 1024px) calc(100vw - 54px), 234px";
 
   /*
    * showRemaining-ზე ვაჩვენებთ ყველა დარჩენილ
@@ -275,7 +278,7 @@ export default function SideNewsCard({
                             src={imageUrl}
                             alt={article.title}
                             fill
-                            sizes="(max-width: 900px) 100vw, 234px"
+                            sizes={imageSizes}
                             className="side-news-card__image"
                             loading="lazy"
                             decoding="async"

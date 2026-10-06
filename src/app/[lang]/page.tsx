@@ -118,6 +118,8 @@ export default async function HomePage({
                 initialArticles={heroArticles}
               />
 
+             
+
               <NewsSection
                 sliderArticles={smallSliderArticles}
                 cardArticles={localizedCardArticles}
@@ -181,7 +183,7 @@ export default async function HomePage({
 
             <aside className="home-page__bottom-ad">
               <SideBarAd
-                position="adword"
+                position="h1"
                 lang={lang}
               />
             </aside>

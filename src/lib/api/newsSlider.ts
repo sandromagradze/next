@@ -128,4 +128,3 @@ export async function getArticleById(
 ): Promise<NewsArticle | null> {
   return fetchArticle(lang, id);
 }
-

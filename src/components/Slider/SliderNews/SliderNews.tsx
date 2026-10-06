@@ -196,6 +196,7 @@ const pagination = articles.length > 1 ? (
         height={23}
         alt=""
         aria-hidden="true"
+        loading="eager"
       />
     </button>
 
@@ -245,7 +246,7 @@ return ( <div className={wrapperClassName}> <MainCard
      pagination={pagination}
      compact={compact}
      url={articleUrl}
-       priority={!compact}
+       priority={!compact && safeActiveIndex === 0}
    />
 </div>
 

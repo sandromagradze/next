@@ -66,7 +66,7 @@ export default function Header({
           aria-label="Advertisement"
         >
           <SideBarAd
-            position="b5"
+            position="top3"
             lang={lang}
             className="flex-shrink-0"
           />

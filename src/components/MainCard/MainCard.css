@@ -21,9 +21,9 @@
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  min-height: 236px;
-  height: auto;
+  height: 236px;
   min-width: 0;
+  overflow: hidden;
   background: #fff;
 }
 
@@ -42,7 +42,7 @@
   overflow: hidden;
   color: #000000;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.25;
 }
 

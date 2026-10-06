@@ -40,7 +40,7 @@ export default function NewsCard({
               width={230}
               height={130}
               loading={eager ? "eager" : undefined}
-              sizes="(max-width: 768px) calc(100vw - 32px), 230px"
+              sizes="(max-width: 768px) calc(100vw - 47px), (max-width: 1024px) calc((100vw - 30px) / 3 - 17px), (max-width: 1200px) calc((100vw - 284px) / 3 - 17px), 227px"
             />
           )}
         </div>

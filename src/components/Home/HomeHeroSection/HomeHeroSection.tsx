@@ -35,7 +35,7 @@ export default function HomeHeroSection({
 
         <div className="home-hero__ad-container">
           <SideBarAd
-            position="b4"
+            position="top1"
             lang={lang}
           />
         </div>

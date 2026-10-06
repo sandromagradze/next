@@ -41,7 +41,7 @@ export default function SportSection({
                     alt={article.title}
                     width={170}
                     height={96}
-                    sizes="(max-width: 768px) 100vw, 170px"
+                    sizes="(max-width: 768px) calc((100vw - 46px) / 2), 170px"
                   />
                 </div>
 

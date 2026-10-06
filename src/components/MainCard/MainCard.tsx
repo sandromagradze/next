@@ -79,7 +79,7 @@ export default function MainCard({
           height={236}
           loading={priority ? "eager" : undefined}
           fetchPriority={priority ? "high" : undefined}
-          sizes="(max-width: 700px) 100vw, 418px"
+          sizes="(max-width: 448px) calc(100vw - 30px), 418px"
         />
       </div>
     </div>

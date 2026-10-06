@@ -91,8 +91,8 @@ export default function Navbar({
     }
   };
 
-  const visibleMenu = menu.slice(0, 11);
-  const extraMenu = menu.slice(11);
+  const visibleMenu = menu.slice(0, 10);
+  const extraMenu = menu.slice(10);
 
   return (
     <>
@@ -132,6 +132,15 @@ export default function Navbar({
               </Link>
 
               <ul className="navbar__menu">
+                <li className="navitem">
+                  <Link
+                    href={`/${lang}`}
+                    className="nav-link"
+                  >
+                    {lang === "ka" ? "მთავარი" : "Home"}
+                  </Link>
+                </li>
+
                 {visibleMenu.map((item) => {
                   const url = getMenuUrl(item.link);
 

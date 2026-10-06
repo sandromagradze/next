@@ -117,7 +117,7 @@ export default function VideoCard({
                       alt={item.title}
                       fill
                       className="palnewsliverss__image"
-                      sizes="(max-width: 700px) 100vw, (max-width: 1200px) 50vw, 288px"
+                      sizes="(max-width: 700px) calc(100vw - 30px), (max-width: 900px) calc((100vw - 54px) / 2), (max-width: 1200px) calc((100vw - 126px) / 4), 276px"
                     />
                   )}
 

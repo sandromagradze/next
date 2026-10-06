@@ -303,7 +303,7 @@ export default function LatestNews({
                     width={262}
                     height={148}
                     className="latest-news__image"
-                    sizes="(max-width: 900px) 100vw, 262px"
+                    sizes="(max-width: 768px) calc((100vw - 30px) * 0.4), 262px"
                   />
                 ) : article.image?.original ? (
                   <Image
@@ -312,7 +312,7 @@ export default function LatestNews({
                     width={262}
                     height={148}
                     className="latest-news__image"
-                    sizes="(max-width: 900px) 100vw, 262px"
+                    sizes="(max-width: 768px) calc((100vw - 30px) * 0.4), 262px"
                   />
                 ) : (
                   <div className="latest-news__image-placeholder" />

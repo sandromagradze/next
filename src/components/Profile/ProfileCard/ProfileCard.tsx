@@ -37,7 +37,7 @@ export default function ProfileCard({
       src={image}
       width={176}
       height={176}
-      sizes="176px"
+      sizes="(min-width: 769px) and (max-width: 999px) calc((100vw - 120px) / 5), (min-width: 601px) and (max-width: 624px) calc((100vw - 96px) / 3), 176px"
       className="profile-card__image"
       alt={title}
       priority={priority}

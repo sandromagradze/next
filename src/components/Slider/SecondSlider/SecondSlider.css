@@ -123,6 +123,7 @@
   min-width: 0;
   height: auto;
   align-self: stretch;
+      background: #0000000a;
 
   display: flex;
   flex-direction: column;
@@ -231,6 +232,8 @@
 .second-slider__dot {
   width: 20px;
   height: 20px;
+
+  
 
   flex: 0 0 20px;
 
