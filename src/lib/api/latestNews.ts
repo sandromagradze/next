@@ -64,6 +64,10 @@ export async function getLatestNewsPage(
   );
 
   if (!response.ok) {
+    console.error(
+      `[LatestNews] Request failed: status=${response.status} statusText=${response.statusText} url=${response.url}`,
+    );
+
     throw new Error(
       `Latest news request failed: ${response.status}`,
     );

@@ -302,6 +302,7 @@ export default function LatestNews({
                     alt={article.title}
                     width={262}
                     height={148}
+                    loading="lazy"
                     className="latest-news__image"
                     sizes="(max-width: 768px) calc((100vw - 30px) * 0.4), 262px"
                   />

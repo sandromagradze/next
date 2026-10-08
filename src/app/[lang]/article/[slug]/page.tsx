@@ -6,6 +6,7 @@ import WrapperA from "@/components/WrapperA/WrapperA";
 import ArticleSidebar from "@/components/ArticleSidebar/ArticleSidebar";
 import RssSidebar from "@/components/RssSidebar/RssSidebar";
 import Footer from "@/components/Footer/Footer";
+import PrintButton from "./PrintButton";
 
 import {
   getArticleById,
@@ -21,7 +22,6 @@ import { getRssBlocks } from "@/lib/api/rss";
 import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
 import {
-  absoluteUrl,
   localizedMetadata,
   localizedPath,
   SITE_NAME,
@@ -31,6 +31,8 @@ import {
 } from "@/lib/seo";
 
 import "./ArticlePage.css";
+
+const PUBLIC_SITE_URL = "https://www.interpressnews.ge";
 
 interface ArticlePageProps {
   params: Promise<{
@@ -62,6 +64,16 @@ function getArticlePath(
     url.replace(/^\/+/, "") ||
     `article/${article.id}`
   );
+}
+
+function getPublicArticleUrl(
+  lang: SupportedLanguageCode,
+  path: string,
+): string {
+  return new URL(
+    localizedPath(lang, path),
+    PUBLIC_SITE_URL,
+  ).toString();
 }
 
 export async function generateMetadata({
@@ -107,6 +119,10 @@ export async function generateMetadata({
   }
 
   const path = getArticlePath(article);
+  const articleUrl = getPublicArticleUrl(
+    lang,
+    path,
+  );
 
   const image =
     article.image?.original ||
@@ -134,6 +150,7 @@ export async function generateMetadata({
     {
       openGraph: {
         type: "article",
+        url: articleUrl,
         publishedTime:
           article.pub_dt ||
           undefined,
@@ -149,31 +166,20 @@ export async function generateMetadata({
     },
   );
 
+  metadata.alternates = {
+    ...metadata.alternates,
+    canonical: articleUrl,
+  };
+
   if (alternateArticle) {
     metadata.alternates = {
-      canonical: absoluteUrl(
-        localizedPath(
-          lang,
-          path,
-        ),
-      ),
+      canonical: articleUrl,
       languages: {
-        [lang]: absoluteUrl(
-          localizedPath(
-            lang,
-            path,
-          ),
+        [lang]: articleUrl,
+        [otherLanguage]: getPublicArticleUrl(
+          otherLanguage,
+          getArticlePath(alternateArticle),
         ),
-
-        [otherLanguage]:
-          absoluteUrl(
-            localizedPath(
-              otherLanguage,
-              getArticlePath(
-                alternateArticle,
-              ),
-            ),
-          ),
       },
     };
   }
@@ -220,12 +226,7 @@ export default async function ArticlePage({
     getArticlePath(article);
 
   const canonicalUrl =
-    absoluteUrl(
-      localizedPath(
-        lang,
-        path,
-      ),
-    );
+    getPublicArticleUrl(lang, path);
 
   const image =
     article.image?.original ||
@@ -288,21 +289,40 @@ export default async function ArticlePage({
                   alt={article.title}
                   width={724}
                   height={543}
+                  loading="eager"
                   priority
                   sizes="724px"
                 />
               </figure>
             )}
 
-            <div
-              className="article-page__body"
-              dangerouslySetInnerHTML={{
-                __html:
-                  article.fulltext ||
-                  article.introtext ||
-                  "",
-              }}
-            />
+            <div className="article-page__content">
+              <a
+                className="article-page__share-facebook"
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(canonicalUrl)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Share this article on Facebook"
+              >
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  focusable="false"
+                >
+                  <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073c0 6.019 4.388 11.033 10.125 11.927v-8.432H7.078v-3.495h3.047V9.41c0-3.025 1.792-4.708 4.533-4.708 1.312 0 2.686.235 2.686.235v2.97h-1.514c-1.491 0-1.956.931-1.956 1.886v2.28h3.328l-.532 3.495h-2.796V24C19.612 23.106 24 18.092 24 12.073Z" />
+                </svg>
+              </a>
+              <PrintButton />
+              <div
+                className="article-page__body"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    article.fulltext ||
+                    article.introtext ||
+                    "",
+                }}
+              />
+            </div>
 
             <div className="article-page__rss">
               <RssSidebar

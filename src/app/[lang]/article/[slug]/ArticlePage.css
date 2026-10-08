@@ -54,6 +54,57 @@
   padding: 0 0 15px;
 }
 
+.article-page__content {
+  position: relative;
+}
+
+.article-page__share-facebook {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 32px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background: #1877f2;
+  color: #fff;
+  text-decoration: none;
+}
+
+.article-page__print {
+  position: absolute;
+  top: 36px;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 32px;
+  box-sizing: border-box;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: #e8e8e8;;
+  color: #fff;
+  cursor: pointer;
+  
+}
+
+.article-page__share-facebook:hover,
+.article-page__print:hover {
+  background: #166fe5;
+}
+
+.article-page__share-facebook svg,
+.article-page__print svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
 .article-page__date {
   display: block;
   flex: 0 0 99.4px;

@@ -21,8 +21,12 @@ import { sortByPublicationDate } from "@/lib/api/publicationDate";
 
 import "./page.css";
 
-import type { SupportedLanguageCode } from "@/lib/api/i18n";
+import {
+  isSupportedLanguageCode,
+  type SupportedLanguageCode,
+} from "@/lib/api/i18n";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { HOME_SEO, localizedMetadata } from "@/lib/seo";
 
 interface HomePageProps {
@@ -35,6 +39,11 @@ export async function generateMetadata({
   params,
 }: HomePageProps): Promise<Metadata> {
   const { lang } = await params;
+
+  if (!isSupportedLanguageCode(lang)) {
+    notFound();
+  }
+
   const seo = HOME_SEO[lang];
 
   return localizedMetadata(
@@ -49,6 +58,10 @@ export default async function HomePage({
   params,
 }: HomePageProps) {
   const { lang } = await params;
+
+  if (!isSupportedLanguageCode(lang)) {
+    notFound();
+  }
 
   const [
     profilesResponse,
