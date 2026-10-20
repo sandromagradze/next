@@ -11,17 +11,22 @@ import Link from "next/link";
 import Image from "next/image";
 
 import {
-  getLatestNewsPageFromClient,
   type LatestNewsItem,
 } from "@/lib/api/latestNews";
+import {
+  getCategoryNewsPageFromClient,
+  getLatestNewsPageFromClient,
+} from "@/lib/api/latestNews.client";
 import type { SupportedLanguageCode } from "@/lib/api/i18n";
 import { sortByPublicationDate } from "@/lib/api/publicationDate";
 
-import "./LatestNews.css";
+import "./LatestNews.scss";
 
 interface LatestNewsProps {
   lang: SupportedLanguageCode;
   initialArticles: LatestNewsItem[];
+  categoryId?: number;
+  categoryAlias?: string;
 }
 
 const INITIAL_COUNT = 15;
@@ -30,17 +35,29 @@ const LOAD_COUNT = 5;
 export default function LatestNews({
   lang,
   initialArticles,
+  categoryId,
+  categoryAlias,
 }: LatestNewsProps) {
+  const uniqueInitialArticles = Array.from(
+    new Map(
+      initialArticles.map((article) => [article.id, article]),
+    ).values(),
+  );
+  const isCategoryListing =
+    categoryId !== undefined || categoryAlias !== undefined;
+
   const [articles, setArticles] =
     useState<LatestNewsItem[]>(
-      initialArticles.slice(0, INITIAL_COUNT)
+      () => uniqueInitialArticles.slice(0, INITIAL_COUNT),
     );
 
   const [isExpanded, setIsExpanded] =
-    useState(false);
+    useState(isCategoryListing);
 
   const [isLoading, setIsLoading] =
     useState(false);
+
+  const loadingRef = useRef(false);
 
   const [hasMore, setHasMore] =
     useState(true);
@@ -49,6 +66,9 @@ export default function LatestNews({
    * API page, რომელსაც შემდეგ მოვითხოვთ.
    */
   const nextPageRef = useRef(2);
+  const requestedPagesRef = useRef(
+    new Map<string, Promise<LatestNewsItem[]>>(),
+  );
 
   /*
    * API-დან წამოღებული, მაგრამ ჯერ
@@ -60,27 +80,56 @@ export default function LatestNews({
    */
   const pendingArticlesRef = useRef<
     LatestNewsItem[]
-  >([]);
+  >(uniqueInitialArticles.slice(INITIAL_COUNT));
 
   /*
    * უკვე ნაჩვენები article ID-ები.
    */
-  const loadedIdsRef = useRef(
-    new Set(
-      initialArticles
-        .slice(0, INITIAL_COUNT)
-        .map((article) => article.id)
-    )
+  const processedIdsRef = useRef(
+    new Set(uniqueInitialArticles.map((article) => article.id)),
   );
 
   const loaderRef =
     useRef<HTMLDivElement | null>(null);
 
+  const requestPageOnce = useCallback(
+    (page: number) => {
+      const key = `${lang}:${categoryId ?? "global"}:${categoryAlias ?? ""}:${page}`;
+      const existingRequest =
+        requestedPagesRef.current.get(key);
+
+      if (existingRequest) {
+        return existingRequest;
+      }
+
+      const request =
+        isCategoryListing && categoryId !== undefined
+          ? getCategoryNewsPageFromClient(
+              lang,
+              categoryId,
+              page,
+            ).then((categoryPage) => categoryPage.results)
+          : getLatestNewsPageFromClient(lang, page);
+      requestedPagesRef.current.set(key, request);
+      void request.catch(() => {
+        requestedPagesRef.current.delete(key);
+      });
+
+      return request;
+    },
+    [categoryAlias, categoryId, isCategoryListing, lang],
+  );
+
   const loadMore = useCallback(async () => {
-    if (isLoading || !isExpanded || !hasMore) {
+    if (
+      loadingRef.current ||
+      !isExpanded ||
+      !hasMore
+    ) {
       return;
     }
 
+    loadingRef.current = true;
     setIsLoading(true);
 
     try {
@@ -101,14 +150,6 @@ export default function LatestNews({
           break;
         }
 
-        if (
-          loadedIdsRef.current.has(article.id)
-        ) {
-          continue;
-        }
-
-        loadedIdsRef.current.add(article.id);
-
         nextArticles.push(article);
       }
 
@@ -124,10 +165,7 @@ export default function LatestNews({
           nextPageRef.current;
 
         const pageArticles =
-          await getLatestNewsPageFromClient(
-            lang,
-            page
-          );
+          await requestPageOnce(page);
 
         nextPageRef.current = page + 1;
 
@@ -139,13 +177,29 @@ export default function LatestNews({
         /*
          * ახალი და უნიკალური სიახლეები.
          */
-        const uniquePageArticles =
-          pageArticles.filter(
-            (article) =>
-              !loadedIdsRef.current.has(
-                article.id
-              )
-          );
+        const uniquePageArticles: LatestNewsItem[] = [];
+
+        for (const article of pageArticles) {
+          const matchesCategory =
+            categoryId === undefined &&
+            categoryAlias === undefined
+              ? true
+              : article.categories?.some(
+                  (category) =>
+                    (categoryId !== undefined &&
+                      Number(category.id) === Number(categoryId)) ||
+                    (categoryAlias !== undefined &&
+                      category.alias === categoryAlias),
+                ) === true;
+
+          if (
+            matchesCategory &&
+            !processedIdsRef.current.has(article.id)
+          ) {
+            processedIdsRef.current.add(article.id);
+            uniquePageArticles.push(article);
+          }
+        }
 
         /*
          * ჯერ ვიღებთ იმდენს, რამდენიც გვჭირდება.
@@ -160,10 +214,6 @@ export default function LatestNews({
           );
 
         for (const article of articlesForCurrentBatch) {
-          loadedIdsRef.current.add(
-            article.id
-          );
-
           nextArticles.push(article);
         }
 
@@ -222,13 +272,15 @@ export default function LatestNews({
         error
       );
     } finally {
+      loadingRef.current = false;
       setIsLoading(false);
     }
   }, [
     hasMore,
     isExpanded,
-    isLoading,
-    lang,
+    categoryId,
+    categoryAlias,
+    requestPageOnce,
   ]);
 
   /*
@@ -286,78 +338,121 @@ export default function LatestNews({
   return (
     <section className="latest-news">
       <div className="latest-news__list">
-        {articles.map((article) => (
+        {articles.map((article, index) => (
           <article
             key={article.id}
-            className="latest-news__card"
+            className={`latest-news__card${
+              isCategoryListing ? " latest-news__card--category" : ""
+            }`}
           >
             <Link
-              href={`/${lang}${article.url}`}
-              className="latest-news__link"
+              href={
+                isCategoryListing
+                  ? `/${lang}/article/${article.id}-${article.alias}`
+                  : `/${lang}${article.url}`
+              }
+              className={
+                isCategoryListing
+                  ? "latest-news__category-link"
+                  : "latest-news__link"
+              }
             >
-              <div className="latest-news__image-wrapper">
-                {article.image?.webp ? (
-                  <Image
-                    src={article.image.webp}
-                    alt={article.title}
-                    width={262}
-                    height={148}
-                    loading="lazy"
-                    className="latest-news__image"
-                    sizes="(max-width: 768px) calc((100vw - 30px) * 0.4), 262px"
-                  />
-                ) : article.image?.original ? (
-                  <Image
-                    src={article.image.original}
-                    alt={article.title}
-                    width={262}
-                    height={148}
-                    className="latest-news__image"
-                    sizes="(max-width: 768px) calc((100vw - 30px) * 0.4), 262px"
-                  />
-                ) : (
-                  <div className="latest-news__image-placeholder" />
-                )}
-              </div>
+              {isCategoryListing ? (
+                <>
+                  <div className="latest-news__image-wrapper">
+                    {article.image?.webp ? (
+                      <Image
+                        src={article.image.webp}
+                        alt={article.title}
+                        width={262}
+                        height={148}
+                        loading={
+                          isCategoryListing && index < 2
+                            ? "eager"
+                            : "lazy"
+                        }
+                        className="latest-news__image"
+                        sizes="(max-width: 768px) calc((100vw - 30px) * 0.4), 262px"
+                      />
+                    ) : article.image?.original ? (
+                      <Image
+                        src={article.image.original}
+                        alt={article.title}
+                        width={262}
+                        height={148}
+                        loading={
+                          isCategoryListing && index < 2
+                            ? "eager"
+                            : "lazy"
+                        }
+                        className="latest-news__image"
+                        sizes="(max-width: 768px) calc((100vw - 30px) * 0.4), 262px"
+                      />
+                    ) : (
+                      <div className="latest-news__image-placeholder" />
+                    )}
+                  </div>
 
-              <div className="latest-news__text">
-                <time
-                  dateTime={
-                    article.publish_up
-                  }
-                  className="latest-news__time"
-                >
-                  {article.publish_up}
-                </time>
+                  <div className="latest-news__text">
+                    <time
+                      dateTime={article.pub_dt || article.publish_up}
+                      className="latest-news__time"
+                    >
+                      {article.publish_up || article.pub_dt}
+                    </time>
 
-                <span className="latest-news__title">
-                  {article.title}
-                </span>
-              </div>
+                    <span className="latest-news__title">
+                      {article.title}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="latest-news__image-wrapper">
+                    {article.image?.webp ? (
+                      <Image
+                        src={article.image.webp}
+                        alt={article.title}
+                        width={262}
+                        height={148}
+                        loading="lazy"
+                        className="latest-news__image"
+                        sizes="(max-width: 768px) calc((100vw - 30px) * 0.4), 262px"
+                      />
+                    ) : article.image?.original ? (
+                      <Image
+                        src={article.image.original}
+                        alt={article.title}
+                        width={262}
+                        height={148}
+                        className="latest-news__image"
+                        sizes="(max-width: 768px) calc((100vw - 30px) * 0.4), 262px"
+                      />
+                    ) : (
+                      <div className="latest-news__image-placeholder" />
+                    )}
+                  </div>
+
+                  <div className="latest-news__text">
+                    <time
+                      dateTime={article.publish_up}
+                      className="latest-news__time"
+                    >
+                      {article.publish_up}
+                    </time>
+
+                    <span className="latest-news__title">
+                      {article.title}
+                    </span>
+                  </div>
+
+                </>
+              )}
             </Link>
           </article>
         ))}
       </div>
-<div className="latest-news__expand-content">
-      {!isExpanded && (
-        <button
-          type="button"
-          className="latest-news__expand"
-          onClick={handleExpand}
-        >
-            
-          <span className="latest-news__expand-text">
-            დღის სხვა სიახლეები
-          </span>
-
-          <span
-            className="latest-news__arrow"
-            aria-hidden="true"
-          />
-        </button>
-      )}
-
-      {isExpanded && (
+      {isCategoryListing ? (
         <div
           ref={loaderRef}
           className="latest-news__loader"
@@ -372,7 +467,43 @@ export default function LatestNews({
             </span>
           )}
         </div>
-      )}</div>
+      ) : (
+        <div className="latest-news__expand-content">
+          {!isExpanded && (
+            <button
+              type="button"
+              className="latest-news__expand"
+              onClick={handleExpand}
+            >
+              <span className="latest-news__expand-text">
+                დღის სხვა სიახლეები
+              </span>
+
+              <span
+                className="latest-news__arrow"
+                aria-hidden="true"
+              />
+            </button>
+          )}
+
+          {isExpanded && (
+            <div
+              ref={loaderRef}
+              className="latest-news__loader"
+            >
+              {isLoading && (
+                <span>იტვირთება...</span>
+              )}
+
+              {!isLoading && !hasMore && (
+                <span>
+                  ყველა სიახლე ნაჩვენებია
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </section>
   );
 }

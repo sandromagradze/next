@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-import "./WeatherInfo.css";
+import "./WeatherInfo.scss";
 
 interface CurrentDateTime {
   date: string;

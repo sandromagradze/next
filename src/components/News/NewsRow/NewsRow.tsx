@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import "./NewsRow.css";
+import "./NewsRow.scss";
 
 interface NewsRowProps {
   children: ReactNode;

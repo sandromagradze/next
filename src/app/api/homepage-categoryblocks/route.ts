@@ -1,6 +1,6 @@
 import { isSupportedLanguageCode } from "@/lib/api/i18n";
+import { getCachedCategoryBlocks } from "@/lib/api/categoryBlocks.server";
 
-const API_BASE = "https://www.interpressnews.ge";
 const NO_STORE_HEADERS = {
   "Cache-Control": "no-store",
 };
@@ -15,27 +15,18 @@ export async function GET(request: Request) {
     );
   }
 
-  const response = await fetch(
-    `${API_BASE}/${lang}/api/categoryblocks/`,
-    {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: "",
-      cache: "no-store",
-    },
-  );
+  try {
+    const data = await getCachedCategoryBlocks(lang);
 
-  if (!response.ok) {
+    return Response.json(data, {
+      headers: NO_STORE_HEADERS,
+    });
+  } catch (error) {
+    console.error("[homepage-categoryblocks] Failed:", error);
+
     return Response.json(
-      { error: `Category blocks request failed: ${response.status}` },
-      { status: response.status, headers: NO_STORE_HEADERS },
+      { error: "Category blocks request failed" },
+      { status: 502, headers: NO_STORE_HEADERS },
     );
   }
-
-  return Response.json(await response.json(), {
-    headers: NO_STORE_HEADERS,
-  });
 }

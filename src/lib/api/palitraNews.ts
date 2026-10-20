@@ -1,6 +1,6 @@
 import type { SupportedLanguageCode } from "./i18n";
+import { getCachedRssCollectors } from "./rssCollectors.server";
 
-const API_BASE = "https://dev.ipn.ge";
 const HOMEPAGE_POSITION = "main_page_center_column";
 
 export interface PalitraNewsItem {
@@ -32,36 +32,13 @@ export interface PalitraNewsBlock {
   visual: string;
 }
 
-interface RssCollectorsResponse {
-  blocks: PalitraNewsBlock[];
-}
-
 export async function getPalitraNews(
   lang: SupportedLanguageCode
 ): Promise<PalitraNewsBlock | null> {
-  const response = await fetch(
-    `${API_BASE}/${lang}/api/rss/collectors/fetch-active/`,
-    {
-      method: "POST",
-      headers: {
-        Accept: "*/*",
-      },
-      body: "",
-      cache: "no-store",
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch PalitraNews: ${response.status}`
-    );
-  }
-
-  const data: RssCollectorsResponse =
-    await response.json();
+  const blocks = await getCachedRssCollectors(lang);
 
   return (
-    data.blocks.find(
+    (blocks as unknown as PalitraNewsBlock[]).find(
       (block) =>
         block.domain === "palitranews.ge" &&
         block.position === HOMEPAGE_POSITION,

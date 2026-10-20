@@ -1,0 +1,18 @@
+@font-face {
+  font-family: 'BPGWEB001';
+  src: url('BPGWEB001.woff') format('woff'),
+       url('BPGWEB001.ttf') format('truetype'),
+       url('BPGWEB001.svg#BPGWEB001') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'bpg_web_001';
+  src: url('bpg_web_001.eot');
+  src: url('bpg_web_001.woff2') format('woff2'),
+       url('bpg_web_001.eot?#iefix') format('embedded-opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+

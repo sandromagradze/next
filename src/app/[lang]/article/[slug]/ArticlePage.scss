@@ -1,0 +1,356 @@
+.article-page {
+  width: 100%;
+  background: #fff;
+}
+
+.article-page__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 724px) minmax(234px, 1fr);
+  column-gap: 18px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 0 70px;
+  box-sizing: border-box;
+}
+
+.article-page__article {
+  width: 100%;
+  min-width: 0;
+}
+
+.article-page__header {
+  width: 100%;
+  margin: 0;
+}
+
+.article-page__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 43px;
+}
+
+.article-page__category {
+  font-family: "bpg_arialregular", Arial, sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 4px 8px 3px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  background: rgba(130, 130, 130, 0.63);
+  color: #fff;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.article-page__title {
+  font-family: "bpg_web_001", Georgia, serif;
+  margin: 0;
+  color: #1e5ba6;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 36px;
+  letter-spacing: 0;
+  padding: 0 0 15px;
+  overflow-wrap: anywhere;
+}
+
+.article-page__content {
+  position: relative;
+}
+
+.article-page__share-facebook {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 32px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background: #1877f2;
+  color: #fff;
+  text-decoration: none;
+}
+
+.article-page__print {
+  position: absolute;
+  top: 36px;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 32px;
+  box-sizing: border-box;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: #e8e8e8;;
+  color: #fff;
+  cursor: pointer;
+  
+}
+
+.article-page__share-facebook:hover,
+.article-page__print:hover {
+  background: #166fe5;
+}
+
+.article-page__share-facebook:focus-visible,
+.article-page__print:focus-visible {
+  outline: 2px solid #1e5ba6;
+  outline-offset: 2px;
+}
+
+.article-page__share-facebook svg,
+.article-page__print svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.article-page__date {
+  font-family: "bpg_arialregular", Arial, sans-serif;
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  width: auto;
+  margin: 0;
+  color: #5a5a5a;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.article-page__image-wrapper {
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0 0 18px;
+  overflow: hidden;
+}
+
+.article-page__image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+.article-page__body {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0 0 20px 56px;
+  color: #424242;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25.6px;
+  overflow-wrap: anywhere;
+}
+
+.article-page__body p {
+  margin: 0;
+  padding-bottom: 20px;
+}
+
+.article-page__body a {
+  color: #1e5ba6;
+  text-decoration: none;
+}
+
+.article-page__body a:hover {
+  text-decoration: underline;
+}
+
+.article-page__body strong,
+.article-page__body b {
+  font-weight: 700;
+}
+
+.article-page__body em,
+.article-page__body i {
+  font-style: italic;
+}
+
+.article-page__body ul,
+.article-page__body ol {
+  margin: 0 0 24px;
+  padding-left: 28px;
+}
+
+.article-page__body li {
+  margin-bottom: 8px;
+}
+
+.article-page__body blockquote {
+  margin: 28px 0;
+  padding: 16px 20px;
+  border-left: 4px solid #1e5ba6;
+  color: #444;
+  background: #f6f8fa;
+}
+
+.article-page__body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 28px auto;
+}
+
+.article-page__body iframe {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 28px auto;
+}
+
+.article-page__body video,
+.article-page__body embed,
+.article-page__body object {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 28px auto;
+}
+
+.article-page__body pre {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.article-page__body table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.article-page__body h2,
+.article-page__body h3,
+.article-page__body h4 {
+  margin: 30px 0 16px;
+  color: #171717;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.article-page__body h2 {
+  font-size: 27px;
+}
+
+.article-page__body h3 {
+  font-size: 23px;
+}
+
+.article-page__body h4 {
+  font-size: 20px;
+}
+
+.article-page__body hr {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .article-page__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.32fr);
+    column-gap: 16px;
+    padding-top: 24px;
+  }
+}
+
+@media (max-width: 900px) {
+  .article-page__layout {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 32px;
+    padding: 20px 0 40px;
+  }
+
+  .article-sidebar {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .article-page__layout {
+    row-gap: 24px;
+    padding: 12px 0 32px;
+  }
+
+  .article-page__meta {
+    min-height: 28px;
+    flex-wrap: wrap;
+    padding: 0 0 8px;
+    box-sizing: border-box;
+  }
+
+  .article-page__category {
+    padding-right: 10px;
+  }
+
+  .article-page__date {
+    font-family: "bpg_arialregular", Arial, Helvetica, sans-serif;
+  }
+
+  .article-page__title {
+    width: 100%;
+    padding: 0 0 12px;
+    color: #000;
+    font-family: "bpg_web_001", Georgia, serif;
+    font-size: clamp(21px, 5.5vw, 25px);
+    line-height: 1.4;
+  }
+
+  .article-page__image-wrapper {
+    padding-bottom: 18px;
+  }
+
+  .article-page__image {
+    height: auto;
+  }
+
+  .article-page__content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 0;
+  }
+
+  .article-page__share-facebook,
+  .article-page__print {
+    position: static;
+    flex: 0 0 40px;
+  }
+
+  .article-page__body {
+    flex: 1 0 100%;
+    width: 100%;
+    padding: 0 0 10px;
+    font-size: clamp(16px, 4.2vw, 18px);
+    line-height: 1.55;
+  }
+
+  .article-page__body p {
+    margin: 0;
+    padding-bottom: 20px;
+  }
+
+  .article-page__body h2 {
+    font-size: clamp(22px, 5.5vw, 27px);
+  }
+
+  .article-page__body h3 {
+    font-size: clamp(20px, 5vw, 23px);
+  }
+}

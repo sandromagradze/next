@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { LatestNewsItem } from "@/lib/api/latestNews";
 import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
-import "./NewsCard.css";
+import "./NewsCard.scss";
 
 interface NewsCardProps {
   article: LatestNewsItem;

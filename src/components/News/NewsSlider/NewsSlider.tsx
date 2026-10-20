@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import type { NewsSliderArticle } from "@/lib/api/newsSlider";
 import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
-import "./NewsSlider.css";
+import "./NewsSlider.scss";
 
 interface NewsSliderProps {
   articles: NewsSliderArticle[];

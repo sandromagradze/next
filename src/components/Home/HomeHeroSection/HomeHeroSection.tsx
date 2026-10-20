@@ -1,9 +1,9 @@
 import SliderNews from "@/components/Slider/SliderNews/SliderNews";
-import SideBarAd from "@/components/Ads/SideBarAd";
+import HomeHeroAd from "@/components/Home/HomeHeroSection/HomeHeroAd";
 import type { SupportedLanguageCode } from "@/lib/api/i18n";
 import type { SliderArticle } from "@/lib/api/slider";
 
-import "./HomeHeroSection.css";
+import "./HomeHeroSection.scss";
 
 interface HomeHeroSectionProps {
   lang: SupportedLanguageCode;
@@ -33,12 +33,7 @@ export default function HomeHeroSection({
           initialArticles={initialArticles}
         />
 
-        <div className="home-hero__ad-container">
-          <SideBarAd
-            position="top1"
-            lang={lang}
-          />
-        </div>
+        <HomeHeroAd lang={lang} />
       </div>
     </section>
   );

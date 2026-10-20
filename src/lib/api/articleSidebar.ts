@@ -1,8 +1,7 @@
 import type { SupportedLanguageCode } from "@/lib/api/i18n";
-import { sortByPublicationDate } from "@/lib/api/publicationDate";
+import { getCachedCategoryBlocks } from "@/lib/api/categoryBlocks.server";
+import { getLatestNewsPage } from "@/lib/api/latestNews";
 
-const API_BASE_URL = "https://dev.ipn.ge";
-const CATEGORY_API_BASE_URL = "https://www.interpressnews.ge";
 
 export interface SidebarArticleImage {
   original?: string;
@@ -43,48 +42,13 @@ export interface CategoryBlock {
   articles?: SidebarArticle[];
 }
 
-interface CategoryBlocksResponse {
-  blocks?: CategoryBlock[];
-}
-
-interface LatestNewsResponse {
-  results?: SidebarArticle[];
-}
-
-function getApiUrl(
-  lang: SupportedLanguageCode,
-  path: string,
-): string {
-  return `${API_BASE_URL}/${lang}${path}`;
-}
-
 export async function getCategoryBlocks(
   lang: SupportedLanguageCode,
 ): Promise<CategoryBlock[]> {
   try {
-    const response = await fetch(
-      `${CATEGORY_API_BASE_URL}/${lang}/api/categoryblocks/`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type":
-            "application/x-www-form-urlencoded",
-        },
-        body: "",
-        cache: "no-store",
-      },
-    );
+    const data = await getCachedCategoryBlocks(lang);
 
-    if (!response.ok) {
-      return [];
-    }
-
-    const data =
-      (await response.json()) as CategoryBlocksResponse;
-
-    return Array.isArray(data.blocks)
-      ? data.blocks
-      : [];
+    return data.blocks as CategoryBlock[];
   } catch {
     return [];
   }
@@ -93,43 +57,10 @@ export async function getCategoryBlocks(
 export async function getLatestNews(
   lang: SupportedLanguageCode,
   page = 1,
-  offset = 0,
+  _offset = 0,
 ): Promise<SidebarArticle[]> {
   try {
-    const body = new URLSearchParams({
-      offset: String(offset),
-      page: String(page),
-    });
-
-    const response = await fetch(
-      getApiUrl(lang, "/api/latestnews/"),
-      {
-        method: "POST",
-        headers: {
-          "Content-Type":
-            "application/x-www-form-urlencoded",
-        },
-        body: body.toString(),
-        cache: "no-store",
-      },
-    );
-
-    if (!response.ok) {
-      return [];
-    }
-
-    const data =
-      (await response.json()) as LatestNewsResponse;
-
-    if (!Array.isArray(data.results)) {
-      return [];
-    }
-
-    return sortByPublicationDate(
-      data.results,
-      (article) =>
-        article.pub_dt || article.publish_up,
-    );
+    return await getLatestNewsPage(lang, page);
   } catch {
     return [];
   }

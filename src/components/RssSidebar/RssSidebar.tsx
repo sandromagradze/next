@@ -8,7 +8,7 @@ import {
 import RssLazyBlock from "./RssLazyBlock";
 import RssItemImage from "./RssItemImage";
 
-import "./RssSidebar.css";
+import "./RssSidebar.scss";
 
 interface RssSidebarProps {
   blocks: RssBlock[];

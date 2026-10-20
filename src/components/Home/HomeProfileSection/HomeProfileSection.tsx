@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import ProfileCard from "@/components/Profile/ProfileCard/ProfileCard";
 
-import "./HomeProfileSection.css";
+import "./HomeProfileSection.scss";
 
 interface ProfileItem {
   id: number | string;
@@ -20,6 +20,7 @@ interface HomeProfileSectionProps {
   localizedProfileCards: ProfileItem[];
   totalCount?: number;
   lang: string;
+  showAllProfiles?: boolean;
 }
 
 function getProfileImage(
@@ -36,16 +37,14 @@ export default function HomeProfileSection({
   localizedProfileCards,
   totalCount,
   lang,
+  showAllProfiles = true,
 }: HomeProfileSectionProps) {
-  /*
-   * მთავარ გვერდზე მხოლოდ 4 პროფილი.
-   */
   const visibleProfiles =
-    localizedProfileCards.slice(0, 4);
+    localizedProfileCards.slice(0, showAllProfiles ? 4 : 3);
 
   return (
     <section
-      className="home-profile-section"
+      className={`home-profile-section${showAllProfiles ? "" : " home-profile-section--related"}`}
       aria-labelledby="home-profile-heading"
     >
       <div className="home-profile-section__header">
@@ -58,7 +57,7 @@ export default function HomeProfileSection({
           id="home-profile-heading"
           className="home-profile-section__title"
         >
-          პროფილები
+          პროფილი
         </h2>
       </div>
 
@@ -74,25 +73,27 @@ export default function HomeProfileSection({
           />
         ))}
 
-        <Link
-          href={`/${lang}/profile`}
-          className="home-profile-section__all"
-        >
-          <span className="home-profile-section__all-count">
-            {totalCount ?? localizedProfileCards.length}
-          </span>
-
-          <span className="home-profile-section__all-title">
-            ყველა პროფილი
-          </span>
-
-          <span
-            className="home-profile-section__all-arrow"
-            aria-hidden="true"
+        {showAllProfiles && (
+          <Link
+            href={`/${lang}/profile`}
+            className="home-profile-section__all"
           >
-            →
-          </span>
-        </Link>
+            <span className="home-profile-section__all-count">
+              {totalCount ?? localizedProfileCards.length}
+            </span>
+
+            <span className="home-profile-section__all-title">
+               პროფილი
+            </span>
+
+            <span
+              className="home-profile-section__all-arrow"
+              aria-hidden="true"
+            >
+              →
+            </span>
+          </Link>
+        )}
       </div>
     </section>
   );

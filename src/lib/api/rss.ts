@@ -20,6 +20,7 @@ export interface RssItem {
   link?: string | null;
   original_image?: string | null;
   pubDate?: string | null;
+  datePublished?: string | null;
   title?: string | null;
 }
 
@@ -59,18 +60,10 @@ function isRssResponse(
 export async function getRssBlocks(
   lang: SupportedLanguageCode,
 ): Promise<RssBlock[]> {
-  const url =
-    `${API_BASE}/${lang}/api/rss/collectors/fetch-active/`;
-
   try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        Accept: "*/*",
-      },
-      body: "",
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `/api/rss-blocks?lang=${encodeURIComponent(lang)}`,
+    );
 
     if (!response.ok) {
       console.error(

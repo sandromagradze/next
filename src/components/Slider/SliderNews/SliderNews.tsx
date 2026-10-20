@@ -7,9 +7,10 @@ import MainCard from "@/components/MainCard/MainCard";
 import useSliderNews from "@/components/hooks/useSliderNews";
 import type { SupportedLanguageCode } from "@/lib/api/i18n";
 import type { SliderArticle } from "@/lib/api/slider";
+import { formatSliderPublicationTime } from "@/lib/formatSliderPublicationTime";
 import { stripHtml } from "@/lib/seo";
 
-import "./SliderNews.css";
+import "./SliderNews.scss";
 
 interface SliderNewsProps {
 lang: SupportedLanguageCode;
@@ -240,7 +241,10 @@ const pagination = articles.length > 1 ? (
 
 return ( <div className={wrapperClassName}> <MainCard
      title={current.title}
-     time={current.publish_up}
+     time={formatSliderPublicationTime(
+       current.publish_up,
+       current.pub_dt || current.publish_up,
+     )}
      image={imageUrl}
      preview={getPreviewText(current.introtext)}
      pagination={pagination}

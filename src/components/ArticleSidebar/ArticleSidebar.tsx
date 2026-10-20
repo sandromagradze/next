@@ -7,15 +7,24 @@ import type {
 } from "@/lib/api/articleSidebar";
 import type { SupportedLanguageCode } from "@/lib/api/i18n";
 import type { RssBlock } from "@/lib/api/rss";
+import { getBtuAiArticles } from "@/lib/api/btuAi";
+import BtuAiSection from "@/components/BtuAi/BtuAiSection";
 import RssSidebar from "@/components/RssSidebar/RssSidebar";
+import ArticleSidebarLatestNews from "./ArticleSidebarLatestNews";
 
-import "./ArticleSidebar.css";
+import "./ArticleSidebar.scss";
 
 interface ArticleSidebarProps {
   blocks: CategoryBlock[];
   latestNews: SidebarArticle[];
   rssBlocks: RssBlock[];
   lang: SupportedLanguageCode;
+  eagerFirstInterviewImage?: boolean;
+  viewpointArticles?: SidebarArticle[];
+  showLatestNewsDates?: boolean;
+  showSectionLinks?: boolean;
+  includeBtuAi?: boolean;
+  includeRss?: boolean;
 }
 
 function getImageUrl(
@@ -141,12 +150,19 @@ function getBlockArticles(
 function VerticalBlock({
   block,
   lang,
+  eagerFirstImage,
+  viewAllHref,
 }: {
   block: CategoryBlock;
   lang: string;
+  eagerFirstImage: boolean;
+  viewAllHref?: string;
 }) {
   const articles =
     getBlockArticles(block);
+  const eagerImageArticleId = eagerFirstImage
+    ? articles.find((article) => Boolean(getImageUrl(article.image)))?.id
+    : undefined;
 
   if (!articles.length) {
     return null;
@@ -193,10 +209,15 @@ function VerticalBlock({
                       alt={article.title}
                       fill
                       sizes="(max-width: 768px) 100vw, 280px"
-                      loading="lazy"
+                      loading={
+                        article.id === eagerImageArticleId
+                          ? "eager"
+                          : "lazy"
+                      }
                     />
                   </div>
                 )}
+                
 
                 {(date || time) && (
                   <div className="article-sidebar__article-meta">
@@ -218,6 +239,12 @@ function VerticalBlock({
           );
         })}
       </div>
+      {viewAllHref && (
+        <Link className="article-sidebar__view-all" href={viewAllHref}>
+          <span>{lang === "en" ? "All articles" : "ყველა სტატია"}</span>
+          <span aria-hidden="true">→</span>
+        </Link>
+      )}
     </section>
   );
 }
@@ -225,9 +252,11 @@ function VerticalBlock({
 function VerticalImagelessBlock({
   block,
   lang,
+  viewAllHref,
 }: {
   block: CategoryBlock;
   lang: string;
+  viewAllHref?: string;
 }) {
   const articles =
     getBlockArticles(block);
@@ -277,6 +306,12 @@ function VerticalImagelessBlock({
           },
         )}
       </div>
+      {viewAllHref && (
+        <Link className="article-sidebar__view-all" href={viewAllHref}>
+          <span>{lang === "en" ? "All articles" : "ყველა სტატია"}</span>
+          <span aria-hidden="true">→</span>
+        </Link>
+      )}
     </section>
   );
 }
@@ -284,15 +319,35 @@ function VerticalImagelessBlock({
 function CategoryBlocks({
   blocks,
   lang,
+  eagerFirstInterviewImage,
+  viewpointArticles,
+  showSectionLinks,
 }: {
   blocks: CategoryBlock[];
   lang: string;
+  eagerFirstInterviewImage: boolean;
+  viewpointArticles: SidebarArticle[];
+  showSectionLinks: boolean;
 }) {
-  const articleBlocks = blocks.filter(
-    (block) =>
-      block.alias === "interviu" ||
-      block.alias === "presis-mimoxilva",
+  const interviewBlocks = blocks.filter((block) =>
+    ["interviu", "interview"].includes(block.alias),
   );
+  const pressReviewBlocks = blocks.filter((block) =>
+    ["presis-mimoxilva", "press-review"].includes(block.alias),
+  );
+  const viewpointBlock: CategoryBlock | null = viewpointArticles.length
+    ? {
+        id: lang === "ka" ? 48 : 46,
+        alias: "viewpoint",
+        title: lang === "en" ? "Viewpoint" : "თვალსაზრისი",
+        articles: viewpointArticles,
+      }
+    : null;
+  const articleBlocks = [
+    ...interviewBlocks,
+    ...(viewpointBlock ? [viewpointBlock] : []),
+    ...pressReviewBlocks,
+  ];
 
   if (!articleBlocks.length) {
     return null;
@@ -316,6 +371,12 @@ function CategoryBlocks({
               ),
             ),
           );
+        const viewAllHref = showSectionLinks &&
+          (block.alias === "interviu" || block.alias === "interview")
+          ? `/${lang}/interview`
+          : showSectionLinks && block.alias === "viewpoint"
+            ? `/${lang}/viewpoint`
+            : undefined;
 
         if (!hasImages) {
           return (
@@ -323,6 +384,7 @@ function CategoryBlocks({
               key={block.id}
               block={block}
               lang={lang}
+              viewAllHref={viewAllHref}
             />
           );
         }
@@ -332,68 +394,15 @@ function CategoryBlocks({
             key={block.id}
             block={block}
             lang={lang}
+            eagerFirstImage={
+              eagerFirstInterviewImage &&
+              block.alias === "interviu"
+            }
+            viewAllHref={viewAllHref}
           />
         );
       })}
     </>
-  );
-}
-
-function LatestNews({
-  articles,
-  lang,
-}: {
-  articles: SidebarArticle[];
-  lang: string;
-}) {
-  if (!articles.length) {
-    return null;
-  }
-
-  return (
-    <section className="article-sidebar__latest">
-      <header className="article-sidebar__block-header">
-        <h2 className="article-sidebar__block-title">
-          ბოლო სიახლეები
-        </h2>
-      </header>
-
-      <div className="article-sidebar__latest-list">
-        {articles.slice(0, 3).map((article) => {
-          const articleUrl =
-            getArticleUrl(
-              lang,
-              article.url,
-            );
-
-          return (
-            <article
-              key={article.id}
-              className="article-sidebar__latest-item"
-            >
-              <Link
-                href={articleUrl}
-                className="article-sidebar__latest-link"
-              >
-                <h3 className="article-sidebar__article-title">
-                  {article.title}
-                </h3>
-              </Link>
-            </article>
-          );
-        })}
-      </div>
-
-      <Link
-        href={`/${lang}/`}
-        className="article-sidebar__view-all"
-      >
-        <span>ყველა სიახლე</span>
-        <span aria-hidden="true">
-          →
-        </span>
-      </Link>
-    </section>
   );
 }
 
@@ -402,26 +411,42 @@ export default function ArticleSidebar({
   latestNews,
   rssBlocks,
   lang,
+  eagerFirstInterviewImage = false,
+  viewpointArticles = [],
+  showLatestNewsDates = false,
+  showSectionLinks = false,
+  includeBtuAi = false,
+  includeRss = true,
 }: ArticleSidebarProps) {
   return (
     <aside
       className="article-sidebar"
       aria-label="სიახლეები"
     >
-      <LatestNews
+      <ArticleSidebarLatestNews
         articles={latestNews}
         lang={lang}
+        showPublicationDate={showLatestNewsDates}
       />
 
       <CategoryBlocks
         blocks={blocks}
         lang={lang}
+        eagerFirstInterviewImage={eagerFirstInterviewImage}
+        viewpointArticles={viewpointArticles}
+        showSectionLinks={showSectionLinks}
       />
 
-      <RssSidebar
-        blocks={rssBlocks}
-        position="inside_page_right_column"
-      />
+      {includeBtuAi && (
+        <BtuAiSection articles={getBtuAiArticles(rssBlocks)} />
+      )}
+
+      {includeRss && (
+        <RssSidebar
+          blocks={rssBlocks}
+          position="inside_page_right_column"
+        />
+      )}
     </aside>
   );
 }

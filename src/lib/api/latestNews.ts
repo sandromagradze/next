@@ -1,13 +1,23 @@
+import "server-only";
+
 import type { SupportedLanguageCode } from "./i18n";
+import { unstable_cache } from "next/cache";
 import { sortByPublicationDate } from "./publicationDate";
 
 const API_BASE = "https://www.interpressnews.ge";
+const CACHE_SECONDS = 30;
 
 export interface LatestNewsImage {
   original: string;
   thumb: string;
   webp: string;
   position?: [number, number];
+}
+
+export interface LatestNewsCategory {
+  id?: number;
+  alias?: string;
+  title?: string;
 }
 
 export interface LatestNewsItem {
@@ -19,6 +29,17 @@ export interface LatestNewsItem {
   pub_dt?: string;
   image: LatestNewsImage | null;
   url: string;
+  video?: unknown;
+  categories?: LatestNewsCategory[];
+}
+
+export interface CategoryNewsPage {
+  alias: string;
+  id: number;
+  pagination: {
+    page: number;
+  };
+  results: LatestNewsItem[];
 }
 
 interface LatestNewsResponse {
@@ -47,6 +68,18 @@ export async function getLatestNewsPage(
   page: number,
   cacheMode: NewsCacheMode = "no-store",
 ): Promise<LatestNewsItem[]> {
+  // The shared 30-second server cache is fresher than the sitemap's
+  // previous one-hour fetch revalidation and is shared by all consumers.
+  void cacheMode;
+
+  const results = await getCachedLatestNewsPage(lang, page);
+  return sortLatestNews(results);
+}
+
+async function fetchLatestNewsPage(
+  lang: SupportedLanguageCode,
+  page: number,
+): Promise<(LatestNewsItem | null)[]> {
   const response = await fetch(
     `${API_BASE}/${lang}/api/latestnews/`,
     {
@@ -57,9 +90,7 @@ export async function getLatestNewsPage(
           "application/x-www-form-urlencoded",
       },
       body: `offset=0&page=${page}`,
-      ...(cacheMode === "revalidate"
-        ? { next: { revalidate: 3600 } }
-        : { cache: "no-store" as const }),
+      cache: "no-store",
     },
   );
 
@@ -73,35 +104,31 @@ export async function getLatestNewsPage(
     );
   }
 
-  const data: LatestNewsResponse =
-    await response.json();
+  const data: unknown = await response.json();
 
-  return sortLatestNews(data.results);
-}
-
-export async function getLatestNewsPageFromClient(
-  lang: SupportedLanguageCode,
-  page: number,
-): Promise<LatestNewsItem[]> {
-  const params = new URLSearchParams({
-    lang,
-    page: String(page),
-  });
-  const response = await fetch(
-    `/api/homepage-latestnews?${params.toString()}`,
-    { cache: "no-store" },
-  );
-
-  if (!response.ok) {
-    throw new Error(
-      `Latest news request failed: ${response.status}`,
-    );
+  if (
+    !data ||
+    typeof data !== "object" ||
+    !Array.isArray((data as LatestNewsResponse).results)
+  ) {
+    throw new Error("Invalid latest news response");
   }
 
-  const data: LatestNewsResponse =
-    await response.json();
+  return (data as LatestNewsResponse).results;
+}
 
-  return sortLatestNews(data.results);
+function getCachedLatestNewsPage(
+  lang: SupportedLanguageCode,
+  page: number,
+): Promise<(LatestNewsItem | null)[]> {
+  return unstable_cache(
+    () => fetchLatestNewsPage(lang, page),
+    ["latest-news", lang, String(page)],
+    {
+      revalidate: CACHE_SECONDS,
+      tags: [`latest-news-${lang}`],
+    },
+  )();
 }
 
 /**

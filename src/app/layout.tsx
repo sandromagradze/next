@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import QueryProvider from "@/components/Providers/QueryProvider";
 import { JsonLd, SITE_NAME, SITE_URL } from "@/lib/seo";
-import "./globals.css";
+import "./tailwind.css";
+import "./globals.scss";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

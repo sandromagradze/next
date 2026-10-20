@@ -8,7 +8,7 @@ import CurrencyTransfer from "@/components/CurrencyTransfer/CurrencyTransfer";
 import LanguageChange from "@/components/LanguageChange/LanguageChange";
 import SideBarAd from "@/components/Ads/SideBarAd";
 
-import "./Header.css";
+import "./Header.scss";
 import WeatherInfo from "@/components/Weather/WeatherInfo";
 import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
@@ -22,18 +22,12 @@ export default function Header({
   const handleLogoClick = (
     event: React.MouseEvent<HTMLAnchorElement>,
   ) => {
-    const currentPath = window.location.pathname;
     const homePath = `/${lang}`;
+    const currentPath = window.location.pathname;
 
-    if (
-      currentPath === homePath ||
-      currentPath === `${homePath}/`
-    ) {
+    if (currentPath === homePath || currentPath === `${homePath}/`) {
       event.preventDefault();
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
+      window.scrollTo({ top: 0, behavior: "auto" });
     }
   };
 

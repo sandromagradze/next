@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import type { SportArticle } from "@/lib/api/sports";
 
-import "./SportSection.css";
+import "./SportSection.scss";
 
 interface SportSectionProps {
   articles: SportArticle[];

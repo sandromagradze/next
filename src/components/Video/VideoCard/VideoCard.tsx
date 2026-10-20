@@ -1,4 +1,4 @@
-import "./VideoCard.css";
+import "./VideoCard.scss";
 import Image from "next/image";
 import type {
   PalitraNewsBlock,

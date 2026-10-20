@@ -21,5 +21,5 @@ export function getBtuAiArticles(
         Boolean(item.title?.trim()) &&
         Boolean(item.link?.trim()),
     )
-    .slice(0, 3);
+    .slice(0, 1);
 }

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import "./WrapperA.css";
+import "./WrapperA.scss";
 
 interface WrapperAProps {
   children: ReactNode;

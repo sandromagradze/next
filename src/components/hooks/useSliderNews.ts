@@ -20,12 +20,10 @@ export default function useSliderNews(
         ? initialArticles
         : undefined,
 
-    staleTime: 0,
+    staleTime: 60 * 1000,
     gcTime: 30 * 60 * 1000,
 
-    refetchOnMount: "always",
-
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: false,
     retry: 1,
 
     enabled: Boolean(lang),

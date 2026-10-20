@@ -8,7 +8,7 @@ import type { LatestNewsItem } from "@/lib/api/latestNews";
 import type { SportArticle } from "@/lib/api/sports";
 import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
-import "./NewsSection.css";
+import "./NewsSection.scss";
 
 interface NewsSectionProps {
   sliderArticles: NewsSliderArticle[];

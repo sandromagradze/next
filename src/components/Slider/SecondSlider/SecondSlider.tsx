@@ -4,8 +4,9 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import type { BpnNewsArticle } from "@/lib/api/bpnNews";
+import { parsePublicationDate } from "@/lib/api/publicationDate";
 
-import "./SecondSlider.css";
+import "./SecondSlider.scss";
 
 interface SecondSliderProps {
   articles: BpnNewsArticle[];
@@ -44,7 +45,8 @@ export default function SecondSlider({
     return null;
   }
 
-  const article = articles[currentIndex];
+  const safeCurrentIndex = Math.min(currentIndex, totalSlides - 1);
+  const article = articles[safeCurrentIndex];
 
   /*
    * BPN-ის API-ში images["364x206"] აბრუნებს
@@ -53,16 +55,48 @@ export default function SecondSlider({
    *
    * ამიტომ ვიყენებთ original_image-ს.
    */
-  const imageUrl = article.original_image
-    ? article.original_image.replace(
-        "http://",
-        "https://"
-      )
-    : "";
+  const normalizeExternalUrl = (
+    value: string | null | undefined,
+    baseUrl: string,
+  ): string => {
+    const normalized = value?.trim();
+    if (!normalized) return "";
 
-  const logoUrl = logo
-    ? `https://dev.ipn.ge${logo}`
-    : "";
+    try {
+      const url = new URL(
+        normalized.startsWith("//")
+          ? `https:${normalized}`
+          : normalized,
+        baseUrl,
+      );
+      if (url.protocol !== "http:" && url.protocol !== "https:") return "";
+      if (url.protocol === "http:") url.protocol = "https:";
+      return url.href;
+    } catch {
+      return "";
+    }
+  };
+
+  const imageCandidates = [
+    article.original_image,
+    article.image,
+    article.images?.["364x206"],
+    article.images?.["288x162"],
+    article.images?.["234x152"],
+    article.images?.["206x116"],
+    article.images?.["172x104"],
+    article.images?.["170x96"],
+  ];
+  const imageUrl = imageCandidates
+    .map((candidate) => normalizeExternalUrl(candidate, "https://bpn.ge/"))
+    .find(Boolean) ?? "";
+
+  const logoUrl = normalizeExternalUrl(logo, "https://dev.ipn.ge/");
+  const articleUrl = normalizeExternalUrl(article.link, "https://bpn.ge/");
+  const publicationDate = article.pubDate?.trim();
+  const hasValidPublicationDate = Boolean(
+    publicationDate && Number.isFinite(parsePublicationDate(publicationDate)),
+  );
 
   const goToPrevious = () => {
     setCurrentIndex((current) => {
@@ -106,7 +140,7 @@ export default function SecondSlider({
 
       <div className="second-slider__content">
         <a
-          href={article.link}
+          href={articleUrl || undefined}
           target="_blank"
           rel="noopener noreferrer"
           className="second-slider__image-link"
@@ -127,12 +161,14 @@ export default function SecondSlider({
 
         <div className="second-slider__right">
           <div className="second-slider__info">
-            <time className="second-slider__time">
-              {article.pubDate}
-            </time>
+            {hasValidPublicationDate && (
+              <time className="second-slider__time">
+                {publicationDate}
+              </time>
+            )}
 
             <a
-              href={article.link}
+              href={articleUrl || undefined}
               target="_blank"
               rel="noopener noreferrer"
               className="second-slider__title"
@@ -157,7 +193,7 @@ export default function SecondSlider({
                   key={`${item.link}-${index}`}
                   type="button"
                   className={`second-slider__dot ${
-                    index === currentIndex
+                    index === safeCurrentIndex
                       ? "second-slider__dot--active"
                       : ""
                   }`}
@@ -166,7 +202,7 @@ export default function SecondSlider({
                   }}
                   aria-label={`სლაიდი ${index + 1}`}
                   aria-current={
-                    index === currentIndex
+                    index === safeCurrentIndex
                       ? "true"
                       : undefined
                   }

@@ -5,7 +5,7 @@ import Link from "next/link";
 import useRates from "@/components/hooks/useRates";
 import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
-import "./CurrencyTransfer.css";
+import "./CurrencyTransfer.scss";
 
 interface CurrencyRow {
   code: string;

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import SearchResult from "./SearchResult";
-import "./SearchBar.css";
+import "./SearchBar.scss";
 
 interface SearchBarProps {
   lang: string;

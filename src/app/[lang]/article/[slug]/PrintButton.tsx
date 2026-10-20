@@ -1,12 +1,16 @@
 "use client";
 
-export default function PrintButton() {
+export default function PrintButton({
+  ariaLabel = "Print this article",
+}: {
+  ariaLabel?: string;
+}) {
   return (
     <button
       className="article-page__print"
       type="button"
       onClick={() => window.print()}
-      aria-label="Print this article"
+      aria-label={ariaLabel}
     >
       <svg
         aria-hidden="true"

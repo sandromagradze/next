@@ -23,7 +23,7 @@ export default function useCategoryBlocks(
 
     refetchOnMount: "always",
 
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: false,
 
     retry: 1,
 

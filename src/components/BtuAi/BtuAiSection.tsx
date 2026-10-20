@@ -7,7 +7,7 @@ import {
   getRssItemTime,
 } from "@/lib/api/rss";
 
-import "./BtuAiSection.css";
+import "./BtuAiSection.scss";
 
 interface BtuAiSectionProps {
   articles: BtuAiArticle[];

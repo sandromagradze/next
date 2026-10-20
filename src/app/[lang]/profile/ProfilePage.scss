@@ -1,0 +1,253 @@
+.profile-page {
+  width: 100%;
+  padding: 32px 0 70px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.profile-page--with-footer {
+  padding-bottom: 0;
+}
+
+.profile-page__layout {
+  display: grid;
+  grid-template-columns: 732px 234px minmax(0, 1fr);
+  column-gap: 15px;
+  align-items: start;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.profile-page__main,
+.profile-page__sidebar,
+.profile-page__ad {
+  min-width: 0;
+  
+}
+
+.profile-page__main {
+  scroll-margin-top: 170px;
+}
+
+.profile-page__heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-width: 0;
+}
+
+.profile-page__sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 24px;
+}
+
+.profile-page__title {
+  flex: 0 1 auto;
+  margin: 0;
+  color: #1e5ba6;
+  font-family: "bpg_banner_extrasquare_capsRg", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 12px 0 17px;
+}
+
+.profile-search {
+  display: flex;
+  flex: 0 1 300px;
+  align-items: center;
+  min-width: 0;
+  width: min(300px, 45%);
+  height: 35px;
+  border: 1px solid #d8d8d8;
+  box-sizing: border-box;
+}
+
+.profile-search__input {
+  flex: 1 1 auto;
+  width: 90%;
+  min-width: 0;
+  height: 33px;
+  padding: 0 5%;
+  border: 0;
+  outline-offset: -2px;
+  background: transparent;
+  color: #868686;
+  font-family: "bpg_arialregular", sans-serif;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.profile-search__input::placeholder {
+  color: #868686;
+  opacity: 1;
+}
+
+.profile-search__button {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 33px;
+  padding: 0;
+  border: 0;
+  background: transparent url("/static/img/search.svg") center / 50% no-repeat;
+  cursor: pointer;
+}
+
+.profile-page__empty {
+  padding: 24px;
+  text-align: center;
+}
+
+.profile-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  padding-top: 17px;
+}
+
+.profile-page__ad {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: sticky;
+  top: 24px;
+}
+
+.profile-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 24px;
+}
+
+.profile-pagination__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile-pagination__arrow {
+  display: inline-flex;
+  min-width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  border: 1px solid #d8d8d8;
+  border-radius: 5px;
+ background: #d6d6d6 !important;  
+  text-decoration: none;
+  box-sizing: border-box;
+  
+}
+.profile-pagination__number{
+  display: inline-flex;
+  min-width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+  margin:0 3px;
+}
+
+
+.profile-pagination__number:hover,
+.profile-pagination__arrow:hover {
+  background: #f3f6fa;
+  border-radius: 5px;
+
+}
+
+.profile-pagination__number.is-active {
+  color: #1e5ba6;
+}
+
+.profile-pagination__arrow[aria-disabled="true"] {
+  pointer-events: none;
+   border: 1px solid #d8d8d8;
+  border-radius: 5px;
+    background-color:#1e5ba6;
+
+
+}
+
+.profile-pagination__ellipsis {
+  color: #666;
+  
+}
+
+@media (max-width: 1100px) {
+  .profile-page__layout {
+    grid-template-columns: minmax(0, 1fr) 234px;
+    column-gap: 20px;
+  }
+
+  .profile-page__ad {
+    position: static;
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    padding-top: 8px;
+  }
+}
+
+@media (max-width: 900px) {
+  .profile-page__main {
+    scroll-margin-top: 64px;
+  }
+}
+
+@media (max-width: 430px) {
+  .profile-page__main {
+    scroll-margin-top: 112px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .profile-page__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .profile-page__sidebar,
+  .profile-page__ad {
+    grid-column: auto;
+  }
+
+  .profile-page__sidebar {
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .profile-page {
+    padding-top: 20px;
+  }
+
+  .profile-page__heading-row {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+  }
+
+  .profile-search {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .profile-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,7 +1,7 @@
 import type { SupportedLanguageCode } from "./i18n";
 import { sortByPublicationDate } from "./publicationDate";
+import { getCachedRssCollectors } from "./rssCollectors.server";
 
-const API_BASE = "https://dev.ipn.ge";
 const HOMEPAGE_POSITION = "main_page_center_column";
 
 export interface SportArticle {
@@ -33,39 +33,17 @@ interface SportBlock {
   visual: string;
 }
 
-interface SportResponse {
-  blocks: SportBlock[];
-}
-
 export async function getSportArticles(
   lang: SupportedLanguageCode,
 ): Promise<SportArticle[]> {
-  const response = await fetch(
-    `${API_BASE}/${lang}/api/rss/collectors/fetch-active/`,
-    {
-      method: "POST",
-      headers: {
-        Accept: "*/*",
-      },
-      body: "",
-      cache: "no-store",
-    },
-  );
+  const blocks = await getCachedRssCollectors(lang);
 
-  if (!response.ok) {
-    throw new Error(
-      `Sport RSS API error: ${response.status}`,
+  const sportBlock =
+    (blocks as unknown as SportBlock[]).find(
+      (block) =>
+        block.domain === "sportall.ge" &&
+        block.position === HOMEPAGE_POSITION,
     );
-  }
-
-  const data: SportResponse =
-    await response.json();
-
-  const sportBlock = data.blocks.find(
-    (block) =>
-      block.domain === "sportall.ge" &&
-      block.position === HOMEPAGE_POSITION,
-  );
 
   if (!sportBlock) {
     return [];

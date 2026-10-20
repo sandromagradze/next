@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import "./ProfileCard.css";
+import "./ProfileCard.scss";
 
 interface ProfileCardProps {
   id: number | string;
   image?: string | null;
   title: string;
   position?: string;
+  alias?: string;
   priority?: boolean;
   lang?: string;
 }
@@ -17,12 +18,13 @@ export default function ProfileCard({
   image,
   title,
   position,
+  alias,
   priority = false,
   lang,
 }: ProfileCardProps) {
   const profileHref =
     lang
-      ? `/${lang}/profile/${id}`
+      ? `/${lang}/profiles/${id}${alias ? `-${alias}` : ""}`
       : `/profile/${id}`;
 
   return (

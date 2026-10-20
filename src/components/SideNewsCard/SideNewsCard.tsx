@@ -2,21 +2,32 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import BtuAiSection from "@/components/BtuAi/BtuAiSection";
+import ArticleSidebarLatestNews from "@/components/ArticleSidebar/ArticleSidebarLatestNews";
+import RssItemImage from "@/components/RssSidebar/RssItemImage";
 import useCategoryBlocks from "@/components/hooks/useCategoryBlocks";
 import useRssBlocks from "@/components/hooks/useRssBlocks";
 
 import { getBtuAiArticles } from "@/lib/api/btuAi";
+import {
+  getRssImageUrl,
+  type RssBlock,
+  type RssItem,
+} from "@/lib/api/rss";
+import { formatPublicationDateTime } from "@/lib/formatSliderPublicationTime";
+import type { LatestNewsItem } from "@/lib/api/latestNews";
 import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
-import "./SideNewsCard.css";
+import "./SideNewsCard.scss";
+import SideBarAd from "../Ads/SideBarAd";
 
 interface SideNewsCardProps {
   lang: SupportedLanguageCode;
   blockAlias?: string;
   showRemaining?: boolean;
+  latestNews?: LatestNewsItem[];
 }
 
 function getImageUrl(
@@ -77,30 +88,6 @@ function getImageUrl(
   return `https://dev.ipn.ge/${src}`;
 }
 
-function getTime(article: {
-  pub_dt?: string;
-  publish_up?: string;
-}): string {
-  const value =
-    article.pub_dt ||
-    article.publish_up ||
-    "";
-
-  if (!value) {
-    return "";
-  }
-
-  if (value.includes("T")) {
-    return (
-      value
-        .split("T")[1]
-        ?.slice(0, 5) ?? ""
-    );
-  }
-
-  return value.slice(0, 5);
-}
-
 function getArticleUrl(
   lang: string,
   url?: string,
@@ -123,10 +110,124 @@ function getArticleUrl(
   }`;
 }
 
+const nextImageHosts = new Set([
+  "cdn3.ipn.ge",
+  "cdn2.ipn.ge",
+  "dev.ipn.ge",
+  "sportall.ge",
+  "www.bpn.ge",
+  "bpn.ge",
+  "video.ambebi.ge",
+  "mshoblebi.ge",
+]);
+
+function canUseNextImage(src: string): boolean {
+  try {
+    const url = new URL(src);
+    return (
+      url.protocol === "https:" &&
+      nextImageHosts.has(url.hostname) &&
+      (url.hostname !== "mshoblebi.ge" ||
+        url.pathname.startsWith("/media/"))
+    );
+  } catch {
+    return false;
+  }
+}
+
+function LowerSectionHeading({
+  title,
+  logo,
+}: {
+  title: string;
+  logo?: string | null;
+}) {
+  const [imageFailed, setImageFailed] = useState(false);
+  const imageUrl = getRssImageUrl(logo);
+
+  return (
+    <h2 className="side-news-card__title">
+      {imageUrl && !imageFailed ? (
+        canUseNextImage(imageUrl) ? (
+          <Image
+            src={imageUrl}
+            alt={`${title} logo`}
+            width={180}
+            height={40}
+            className="side-news-card__section-logo"
+            onError={() => setImageFailed(true)}
+          />
+        ) : (
+          // External RSS logo hosts outside remotePatterns must bypass Next image optimization.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={imageUrl}
+            alt={`${title} logo`}
+            className="side-news-card__section-logo"
+            loading="lazy"
+            decoding="async"
+            onError={() => setImageFailed(true)}
+          />
+        )
+      ) : (
+        title
+      )}
+    </h2>
+  );
+}
+
+function LowerRssSection({
+  block,
+  title,
+  lang,
+  itemCount,
+  items: suppliedItems,
+}: {
+  block: RssBlock;
+  title: string;
+  lang: SupportedLanguageCode;
+  itemCount?: number;
+  items?: RssItem[];
+}) {
+  const items = (suppliedItems ?? block.items ?? []).filter(
+    (item): item is RssItem & { title: string; link: string } =>
+      Boolean(item.title?.trim() && item.link?.trim()),
+  );
+  const visibleItems = itemCount ? items.slice(0, itemCount) : items;
+
+  if (!visibleItems.length) return null;
+
+  return (
+    <section className="side-news-card side-news-card--lower">
+      <LowerSectionHeading title={title} logo={block.logo} />
+      <div className="side-news-card__list">
+        {visibleItems.map((item, index) => {
+          const publicationDate = formatPublicationDateTime(item.pubDate, lang);
+          return (
+            <article
+              key={`${block.id}-${item.link}-${index}`}
+              className="side-news-card__item"
+            >
+              <a href={item.link} target="_blank" rel="noopener noreferrer" className="side-news-card__link">
+                <RssItemImage item={item} title={item.title} />
+                {publicationDate && (
+                  <time className="todaynewsdate">{publicationDate}</time>
+                )}
+                <h3 className="side-news-card__headline">{item.title}</h3>
+              </a>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 export default function SideNewsCard({
   lang,
   blockAlias,
   showRemaining = false,
+  latestNews,
 }: SideNewsCardProps) {
   const {
     data: blocks = [],
@@ -155,12 +256,10 @@ export default function SideNewsCard({
   const visibleBlocks = useMemo(() => {
     if (showRemaining) {
       return blocks.filter(
-        (block) =>
-          block.alias !== "interviu" &&
-          block.alias !==
-            "presis-mimoxilva",
+        (block) => block.title?.trim() === "მნიშვნელოვანი ინფორმაცია",
       );
     }
+
 
     if (blockAlias) {
       return blocks.filter(
@@ -192,6 +291,7 @@ export default function SideNewsCard({
   ]);
 
   if (
+    !showRemaining &&
     isLoading &&
     !renderedBlocks.length &&
     !btuAiArticles.length
@@ -206,6 +306,7 @@ export default function SideNewsCard({
   }
 
   if (
+    !showRemaining &&
     isError &&
     !renderedBlocks.length &&
     !btuAiArticles.length
@@ -220,14 +321,83 @@ export default function SideNewsCard({
   }
 
   if (
+    !showRemaining &&
     !renderedBlocks.length &&
     !btuAiArticles.length
   ) {
     return null;
   }
 
+  if (showRemaining) {
+    const getSource = (block: RssBlock) =>
+      `${block.domain} ${block.title ?? ""}`.toLowerCase();
+    const radioBlock = rssBlocks.find((block) => {
+      const source = getSource(block);
+      return block.position === "main_page_right_column" &&
+        source.includes("palitra") && source.includes("radio");
+    });
+    const palitraVideoBlock = rssBlocks.find((block) =>
+      block.position === "main_page_right_column" &&
+      getSource(block).includes("palitravideo.ge"),
+    );
+    const mkurnaliBlock = rssBlocks.find((block) =>
+      block.position === "main_page_right_column" &&
+      getSource(block).includes("mkurnali.ge"),
+    );
+    return (
+      <div className="side-news-card__lower-content">
+        {radioBlock && <LowerRssSection block={radioBlock} title="Palitra Radio" lang={lang} />}
+        {renderedBlocks.map((block) => (
+          <aside key={block.id ?? block.alias} className="side-news-card side-news-card--lower">
+            <h2 className="side-news-card__title">{block.title}</h2>
+            <div className="side-news-card__list">
+              {(block.articles ?? []).map((article) => {
+                const imageUrl = getImageUrl(article.image);
+                const publicationDate =
+                  formatPublicationDateTime(article.pub_dt, lang) ||
+                  formatPublicationDateTime(article.publish_up, lang);
+                return (
+                  <article key={article.id} className="side-news-card__item">
+                    <Link href={getArticleUrl(lang, article.url)} className="side-news-card__link">
+                      {imageUrl && (
+                        <div className="side-news-card__image-wrapper">
+                          <Image src={imageUrl} alt={article.title} fill sizes={imageSizes} className="side-news-card__image" loading="lazy" />
+                        </div>
+                      )}
+                      {publicationDate && (
+                        <time className="todaynewsdate">{publicationDate}</time>
+                      )}
+                      <h3 className="side-news-card__headline">{article.title}</h3>
+                    </Link>
+                  </article>
+                );
+              })}
+            </div>
+          </aside>
+        ))}
+        {palitraVideoBlock && (
+          <LowerRssSection block={palitraVideoBlock} title="Palitravideo.ge" lang={lang} itemCount={2} />
+        )}
+        {mkurnaliBlock && (
+          <LowerRssSection block={mkurnaliBlock} title="Mkurnali.ge" lang={lang} itemCount={2} />
+        )}
+        <div className="side-news-card__lower-ad">
+          <SideBarAd position="adword" lang={lang} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
+      {latestNews && (
+        <ArticleSidebarLatestNews
+          articles={latestNews}
+          lang={lang}
+          showPublicationDate
+        />
+      )}
+
       {renderedBlocks.map((block) => (
         <aside
           key={
@@ -235,9 +405,15 @@ export default function SideNewsCard({
           }
           className="side-news-card"
         >
-          <div className="side-news-card__title">
-            {block.title}
-          </div>
+    <h2 className="side-news-card__title">
+  {block.title?.trim() === "მნიშვნელოვანი ინფორმაცია" ? (
+    <span className="side-news-card__title--important">
+      {block.title}
+    </span>
+  ) : (
+    block.title
+  )}
+</h2>
 
           <div className="side-news-card__list">
             {(block.articles ?? []).map(
@@ -257,8 +433,9 @@ export default function SideNewsCard({
                     article.url,
                   );
 
-                const time =
-                  getTime(article);
+                const publicationDate =
+                  formatPublicationDateTime(article.pub_dt, lang) ||
+                  formatPublicationDateTime(article.publish_up, lang);
 
                 return (
                   <article
@@ -271,7 +448,9 @@ export default function SideNewsCard({
                       aria-label={
                         article.title
                       }
+
                     >
+
                       {imageUrl ? (
                         <div className="side-news-card__image-wrapper">
                           <Image
@@ -293,17 +472,16 @@ export default function SideNewsCard({
                           </span>
                         )}
 
-                        {time && (
-                          <time className="side-news-card__time">
-                            {time}
-                          </time>
-                        )}
                       </div>
 
+                      {publicationDate && (
+                        <time className="todaynewsdate">{publicationDate}</time>
+                      )}
                       <h3 className="side-news-card__headline">
                         {article.title}
                       </h3>
                     </Link>
+
                   </article>
                 );
               },

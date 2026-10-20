@@ -17,7 +17,7 @@ import {
   getCategoryBlocks,
   getLatestNews,
 } from "@/lib/api/articleSidebar";
-import { getRssBlocks } from "@/lib/api/rss";
+import { getCachedRssBlocks } from "@/lib/api/rssCollectors.server";
 
 import type { SupportedLanguageCode } from "@/lib/api/i18n";
 
@@ -30,7 +30,7 @@ import {
   JsonLd,
 } from "@/lib/seo";
 
-import "./ArticlePage.css";
+import "./ArticlePage.scss";
 
 const PUBLIC_SITE_URL = "https://www.interpressnews.ge";
 
@@ -215,7 +215,7 @@ export default async function ArticlePage({
       0,
     ),
 
-    getRssBlocks(lang),
+    getCachedRssBlocks(lang),
   ]);
 
   if (!article) {
@@ -291,7 +291,7 @@ export default async function ArticlePage({
                   height={543}
                   loading="eager"
                   priority
-                  sizes="724px"
+                  sizes="(max-width: 900px) calc(100vw - 30px), (max-width: 1024px) calc(100vw - 300px), 724px"
                 />
               </figure>
             )}

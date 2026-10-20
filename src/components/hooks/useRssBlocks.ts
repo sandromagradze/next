@@ -15,16 +15,15 @@ export default function useRssBlocks(
   return useQuery<RssBlock[]>({
     queryKey: ["rss-blocks", "homepage-placement-v2", lang],
 
-    queryFn: () =>
-      getRssBlocks(lang),
+    queryFn: () => getRssBlocks(lang),
 
-    staleTime: 0,
+    staleTime: 30_000,
 
     gcTime: 30 * 60 * 1000,
 
-    refetchOnMount: "always",
+    refetchOnMount: true,
 
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: false,
 
     retry: 1,
 

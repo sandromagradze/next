@@ -1,8 +1,8 @@
 import type { SupportedLanguageCode } from "./i18n";
 import type { SliderArticle } from "./slider";
+import { getCachedHomepageSlider } from "./homepageSlider.server";
 
 const API_BASE = "https://www.interpressnews.ge";
-const SLIDER_API_BASE = "https://www.interpressnews.ge";
 
 export interface NewsSliderImage {
   original: string;
@@ -33,37 +33,11 @@ interface NewsSliderResponse {
   top_small?: NewsSliderArticle[];
 }
 
-async function fetchSliderData(
-  lang: SupportedLanguageCode,
-): Promise<NewsSliderResponse> {
-  const response = await fetch(
-    `${SLIDER_API_BASE}/${lang}/api/slider/`,
-    {
-      method: "POST",
-      headers: {
-        Accept: "*/*",
-      },
-      body: "",
-      cache: "no-store",
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(
-      `News slider API error: ${response.status}`,
-    );
-  }
-
-  const data: NewsSliderResponse =
-    await response.json();
-
-  return data;
-}
-
 export async function getSliderContent(
   lang: SupportedLanguageCode,
 ): Promise<NewsSliderResponse> {
-  return fetchSliderData(lang);
+  const data = await getCachedHomepageSlider(lang);
+  return data as unknown as NewsSliderResponse;
 }
 
 export async function getNewsSliderArticles(

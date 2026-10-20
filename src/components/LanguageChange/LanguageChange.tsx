@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 
 import { SUPPORTED_LANGUAGES } from "@/lib/api/i18n";
 
-import "./LanguageChange.css";
+import "./LanguageChange.scss";
 
 interface LanguageChangeProps {
   currentLanguage: string;

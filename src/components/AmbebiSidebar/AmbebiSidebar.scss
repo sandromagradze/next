@@ -1,0 +1,21 @@
+.ambebi-sidebar__sticky {
+  position: sticky;
+  top: 52px;
+}
+
+.ambebi-sidebar {
+  min-width: 0;
+}
+
+.ambebi-sidebar__status {
+  margin: 0;
+  color: #666;
+  font-size: 13px;
+}
+
+@media (max-width: 1200px) {
+  .ambebi-sidebar__sticky {
+    position: static;
+    top: auto;
+  }
+}

@@ -1,0 +1,286 @@
+
+@font-face {
+  font-family: "BPG Arial";
+  src: url("/fonts/bpg-arial-webfont.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "bpg_arialregular";
+  src: url("/static/fonts/bpg_arial/bpg_arial.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "bpg_web_001_capsregular";
+  src: url("/static/fonts/bpg_web_001_caps/bpg_web_001_caps.woff2")
+          format("woff2"),
+      url("/static/fonts/bpg_web_001_caps/bpg_web_001_caps.woff")
+          format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "BPGWEB001";
+  src: url("/static/fonts/bpg_web_001/BPGWEB001.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "bpg_web_001";
+  src: url("/static/fonts/bpg_web_001/bpg_web_001.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "brush_script_georgian";
+  src: url("/static/fonts/brush_script_georgian/brush_script_georgian.woff2")
+          format("woff2"),
+      url("/static/fonts/brush_script_georgian/brush_script_georgian.woff")
+          format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "bpg_rioni_arialregular";
+  src: url("/static/fonts/bpg_rioni_arial/bpg_rioni_arial.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Conv_BPG_Arial_Caps_2010";
+  src: url("/static/fonts/BPG_Arial_Caps_2010/BPG_Arial_Caps_2010.woff")
+          format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "bpg_banner_extrasquare_capsRg";
+  src: url("/static/fonts/BPG_Banner_ExtraSquare_Caps/BPG_Banner_ExtraSquare_Caps.woff2")
+          format("woff2"),
+      url("/static/fonts/BPG_Banner_ExtraSquare_Caps/BPG_Banner_ExtraSquare_Caps.woff")
+          format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "BPGArial2010";
+  src: url("/static/fonts/BPG_Arial_2010/BPGArial2010.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BPG_Arial_1";
+  src: url("/static/fonts/BPG_Arial_2010/BPG_Arial_1.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "bpg_algeti";
+  src: url("/static/fonts/BPG_ALGETI/BPG_ALGETI.woff2") format("woff2"),
+      url("/static/fonts/BPG_ALGETI/BPG_ALGETI.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "bpg_nino_mtavruliregular";
+  src: url("/static/fonts/bpg_nino_mtavruli_normal/bpg_nino_mtavruli_normal.woff2")
+          format("woff2"),
+      url("/static/fonts/bpg_nino_mtavruli_normal/bpg_nino_mtavruli_normal.woff")
+          format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "gel";
+  src: url("/static/fonts/gel/gel.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "bpg_banner_quadrosquareRg";
+  src: url("/static/fonts/bpg_banner_quadrosquare/bpg_banner_quadrosquare.woff2")
+          format("woff2"),
+      url("/static/fonts/bpg_banner_quadrosquare/bpg_banner_quadrosquare.woff")
+          format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "bpg_banner_quadrosquare_capRg";
+  src: url("/static/fonts/bpg_banner_quadrosquare_caps/bpg_banner_quadrosquare_caps.woff2")
+          format("woff2"),
+      url("/static/fonts/bpg_banner_quadrosquare_caps/bpg_banner_quadrosquare_caps.woff")
+          format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "bpg_mrgvlovani_caps_2010";
+  src: url("/static/fonts/bpg_mrgvlovani_caps_2010/bpg_mrgvlovani_caps_2010.woff2")
+          format("woff2"),
+      url("/static/fonts/bpg_mrgvlovani_caps_2010/bpg_mrgvlovani_caps_2010.woff")
+          format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "bpg_nino_medium_capsregular";
+  src: url("/static/fonts/bpg_nino_medium_caps/bpg_nino_medium_caps.woff2")
+          format("woff2"),
+      url("/static/fonts/bpg_nino_medium_caps/bpg_nino_medium_caps.woff")
+          format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Conv_BebasNeueRegular2";
+  src: url("/static/fonts/BebasNeueRegular2/BebasNeueRegular2.woff")
+          format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+/* icons fonts*/
+@font-face {
+  font-family: "IPN";
+  src: url("/static/fonts/iconfonts/IPN.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+[class*="icon-"]:before {
+  display: inline-block;
+  font-family: "IPN";
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.icon-placeholder:before {
+  content: "\0041";
+}
+.icon-telephone:before {
+  content: "\0042";
+}
+.icon-mail:before {
+  content: "\0043";
+}
+.icon-Search:before {
+  content: "\0044";
+}
+.icon-Arrows:before {
+  content: "\0045";
+}
+.icon-clock:before {
+  content: "\0046";
+}
+.icon-arrow_right:before {
+  content: "\0047";
+}
+.icon-arrow_left:before {
+  content: "\0048";
+}
+.icon-play:before {
+  content: "\004a";
+}
+.icon-twitter-logo:before {
+  content: "\004c";
+}
+.icon-print:before {
+  content: "\004d";
+}
+.icon-twitter:before {
+  content: "\004e";
+}
+.icon-facebook:before {
+  content: "\004f";
+}
+.icon-arrow_ lenguage:before {
+  content: "\0050";
+}
+.icon-comma:before {
+  content: "\0051";
+}
+.icon-messenger:before {
+  content: "\0052";
+}
+.icon-001-messenger:before {
+  content: "\0053";
+}
+.icon-arrow_gallery:before {
+  content: "\0054";
+}
+.icon-share-symbol:before {
+  content: "\0055";
+}
+.icon-arrow_gallery_02:before {
+  content: "\0056";
+}
+.icon-002-facebook-logo:before {
+  content: "\0057";
+}
+.icon-twitter-logo-silhouette:before {
+  content: "\0058";
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #FFFFFF;
+    --foreground: #171717;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "BPG Arial", Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+img,
+video,
+iframe,
+embed,
+object {
+  max-width: 100%;
+}

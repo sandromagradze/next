@@ -1,4 +1,4 @@
-import "./Footer.css";
+import "./Footer.scss";
 import Image from "next/image";
 import topge from "../../../public/topge.png";
 

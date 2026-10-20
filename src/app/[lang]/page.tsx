@@ -3,10 +3,10 @@ import HomeProfileSection from "@/components/Home/HomeProfileSection/HomeProfile
 import NewsSection from "@/components/News/NewsSection/NewsSection";
 import SecondSlider from "@/components/Slider/SecondSlider/SecondSlider";
 import SideNewsCard from "@/components/SideNewsCard/SideNewsCard";
-import SideBarAd from "@/components/Ads/SideBarAd";
 import WrapperA from "@/components/WrapperA/WrapperA";
 import VideoCard from "@/components/Video/VideoCard/VideoCard";
 import LatestNews from "@/components/LatestNews/LatestNews";
+import AmbebiSidebar from "@/components/AmbebiSidebar/AmbebiSidebar";
 import Footer from "@/components/Footer/Footer";
 
 import { getSliderContent } from "@/lib/api/newsSlider";
@@ -19,7 +19,7 @@ import {
 } from "@/lib/api/latestNews";
 import { sortByPublicationDate } from "@/lib/api/publicationDate";
 
-import "./page.css";
+import "./page.scss";
 
 import {
   isSupportedLanguageCode,
@@ -116,7 +116,7 @@ export default async function HomePage({
   const profiles = profilesResponse.profiles ?? [];
 
   const totalCount =
-    profilesResponse.pagination?.total ??
+    profilesResponse.pagination?.count ??
     profiles.length;
 
   return (
@@ -150,6 +150,7 @@ export default async function HomePage({
               <SideNewsCard
                 lang={lang}
                 blockAlias="interviu"
+                latestNews={latestNews}
               />
 
               <SideNewsCard
@@ -158,12 +159,6 @@ export default async function HomePage({
               />
             </aside>
 
-            <aside className="home-page__ad">
-              <SideBarAd
-                position="adword"
-                lang={lang}
-              />
-            </aside>
           </div>
 
           <HomeProfileSection
@@ -178,30 +173,28 @@ export default async function HomePage({
           block={rssNews.palitra}
         />
 
-        <WrapperA>
-          <div className="home-page__bottom-content">
-            <section className="home-page__latest-news">
-              <LatestNews
-                lang={lang}
-                initialArticles={latestNews.slice(0, 15)}
-              />
-            </section>
+        <div className="containerbottom">
+          <WrapperA>
+            <div className="home-page__bottom-content">
+              <section className="home-page__latest-news">
+                <LatestNews
+                  lang={lang}
+                  initialArticles={latestNews.slice(0, 15)}
+                />
+              </section>
 
-            <aside className="home-page__remaining-blocks">
-              <SideNewsCard
-                lang={lang}
-                showRemaining
-              />
-            </aside>
-
-            <aside className="home-page__bottom-ad">
-              <SideBarAd
-                position="h1"
-                lang={lang}
-              />
-            </aside>
-          </div>
-        </WrapperA>
+              <aside className="home-page__remaining-blocks">
+                <SideNewsCard
+                  lang={lang}
+                  showRemaining
+                />
+              </aside>
+              <aside className="home-page__ambebi">
+                <AmbebiSidebar lang={lang} />
+              </aside>
+            </div>
+          </WrapperA>
+        </div>
       </main>
 
       <Footer lang={lang} />

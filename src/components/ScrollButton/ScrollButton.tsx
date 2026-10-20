@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import "./ScrollButton.css";
+import "./ScrollButton.scss";
 
 export default function ScrollButton() {
   const [isVisible, setIsVisible] = useState(false);

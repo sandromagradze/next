@@ -1,0 +1,18 @@
+@font-face {
+  font-family: 'BPGArial2010';
+  src: url('BPGArial2010.woff') format('woff'),
+       url('BPGArial2010.ttf') format('truetype'),
+       url('BPGArial2010.svg#BPGArial2010') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BPG_Arial_1';
+  src: url('BPG_Arial_1.eot');
+  src: url('BPG_Arial_1.woff2') format('woff2'),
+       url('BPG_Arial_1.eot?#iefix') format('embedded-opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+

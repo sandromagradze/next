@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import useAds from "@/components/hooks/useAds";
 import type { SupportedLanguageCode } from "@/lib/api/i18n";
@@ -9,6 +9,8 @@ interface SideBarAdProps {
   position: string;
   lang: SupportedLanguageCode;
   className?: string;
+  hasAd?: boolean;
+  onAvailabilityChange?: (available: boolean) => void;
 }
 
 declare global {
@@ -17,40 +19,20 @@ declare global {
   }
 }
 
-/**
- * Wait until AdOcean is available.
- *
- * Returns true when AdOcean exists,
- * false when the timeout is reached.
- */
-function waitForAdo(timeout = 15000): Promise<boolean> {
+/** Wait until AdOcean is available. */
+function waitForAdo(): Promise<void> {
   return new Promise((resolve) => {
     if (window.ado) {
-      resolve(true);
+      resolve();
       return;
     }
 
-    const startTime = Date.now();
-
-    const check = () => {
+    const interval = window.setInterval(() => {
       if (window.ado) {
-        resolve(true);
-        return;
+        window.clearInterval(interval);
+        resolve();
       }
-
-      if (Date.now() - startTime >= timeout) {
-        console.warn(
-          "[SideBarAd] AdOcean was not initialized within timeout",
-        );
-
-        resolve(false);
-        return;
-      }
-
-      window.setTimeout(check, 100);
-    };
-
-    check();
+    }, 100);
   });
 }
 
@@ -85,15 +67,7 @@ async function executeScript(
    * before window.ado exists.
    */
   if (requiresAdo) {
-    const adoReady = await waitForAdo();
-
-    if (!adoReady) {
-      console.warn(
-        "[SideBarAd] Skipping AdOcean-dependent script because AdOcean is unavailable",
-      );
-
-      return;
-    }
+    await waitForAdo();
   }
 
   const script = document.createElement("script");
@@ -289,27 +263,98 @@ export default function SideBarAd({
   position,
   lang,
   className = "",
+  hasAd: parentHasAd,
+  onAvailabilityChange,
 }: SideBarAdProps) {
   const containerRef =
     useRef<HTMLDivElement>(null);
+  const [availableAdKey, setAvailableAdKey] = useState<string | null>(null);
 
   const {
     data: ads = [],
     isLoading,
     isError,
   } = useAds(lang);
+  const ad = ads.find((item) => item.position === position);
+  const adHtml = ad?.html?.trim() ?? "";
+  const adKey = `${lang}:${position}:${adHtml}`;
+  const isAdRendered = Boolean(adHtml) && availableAdKey === adKey;
+  const hasAd = parentHasAd === undefined
+    ? isAdRendered
+    : parentHasAd && isAdRendered;
+
+  useEffect(() => {
+    onAvailabilityChange?.(isAdRendered);
+  }, [isAdRendered, onAvailabilityChange]);
 
   useEffect(() => {
     let cancelled = false;
+    const adContainer = containerRef.current;
 
-    async function renderAd() {
-      const container =
-        containerRef.current;
+    if (!adContainer || !adHtml || isLoading || isError) {
+      return;
+    }
 
-      if (!container) {
-        return;
+    const container = adContainer;
+
+    const hasRenderedContent = () => {
+      const textContent = container.cloneNode(true) as HTMLElement;
+      textContent.querySelectorAll("script, style, noscript").forEach((node) => {
+        node.remove();
+      });
+      if (textContent.textContent?.trim()) return true;
+
+      return Array.from(
+        container.querySelectorAll("img, iframe, video"),
+      ).some((element) => {
+        if (element instanceof HTMLImageElement) {
+          return element.complete && element.naturalWidth > 0;
+        }
+
+        if (element instanceof HTMLIFrameElement) {
+          return element.dataset.adLoaded === "true";
+        }
+
+        return element instanceof HTMLVideoElement && element.readyState > 0;
+      });
+    };
+
+    const updateAvailability = () => {
+      const available = hasRenderedContent();
+      setAvailableAdKey((current) => {
+        if (available) return adKey;
+        return current === adKey ? null : current;
+      });
+    };
+
+    const handleResourceLoad = (event: Event) => {
+      const target = event.target;
+      if (target instanceof HTMLIFrameElement && target.src) {
+        try {
+          const frameBody = target.contentDocument?.body;
+          if (frameBody && !frameBody.textContent?.trim() && !frameBody.children.length) {
+            return;
+          }
+        } catch {
+          // Cross-origin frames cannot be inspected; load is the available signal.
+        }
+
+        target.dataset.adLoaded = "true";
       }
 
+      updateAvailability();
+    };
+
+    container.addEventListener("load", handleResourceLoad, true);
+    container.addEventListener("error", handleResourceLoad, true);
+
+    const observer = new MutationObserver(() => {
+      updateAvailability();
+    });
+
+    observer.observe(container, { childList: true, subtree: true });
+
+    async function renderAd() {
       /**
        * Clear previous advertisement.
        */
@@ -330,12 +375,7 @@ export default function SideBarAd({
       /**
        * Find the requested ad position.
        */
-      const ad = ads.find(
-        (item) =>
-          item.position === position,
-      );
-
-      if (!ad?.html) {
+      if (!adHtml) {
         console.warn(
           `[SideBarAd] No ad found for position "${position}"`,
         );
@@ -349,13 +389,15 @@ export default function SideBarAd({
 
       try {
         await loadHtmlWithScripts(
-          ad.html,
+          adHtml,
           container,
         );
 
         if (cancelled) {
           return;
         }
+
+        updateAvailability();
       } catch (error) {
         if (!cancelled) {
           console.error(
@@ -370,22 +412,44 @@ export default function SideBarAd({
 
     return () => {
       cancelled = true;
+      observer.disconnect();
+      container.removeEventListener("load", handleResourceLoad, true);
+      container.removeEventListener("error", handleResourceLoad, true);
 
-      if (containerRef.current) {
-        containerRef.current.innerHTML =
-          "";
+      if (container) {
+        container.innerHTML = "";
       }
     };
   }, [
-    ads,
+    adHtml,
     isLoading,
     isError,
     position,
+    adKey,
   ]);
 
+  if (isLoading || isError || !adHtml) {
+    return null;
+  }
+
+  const isHomepageManaged = Boolean(onAvailabilityChange);
+
   return (
-    <div className={className}>
-      <div ref={containerRef} />
+    <div
+      className={
+        isHomepageManaged && !hasAd
+          ? "home-hero__ad-pending"
+          : className
+      }
+    >
+      <div
+        ref={containerRef}
+        className={
+          isHomepageManaged && !hasAd
+            ? "home-hero__ad-pending-slot"
+            : undefined
+        }
+      />
     </div>
   );
 }

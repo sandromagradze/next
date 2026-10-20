@@ -29,7 +29,9 @@ export async function GET(request: Request) {
       { results },
       { headers: NO_STORE_HEADERS },
     );
-  } catch {
+  } catch (error) {
+    console.error("[latest-news] Failed:", error);
+
     return Response.json(
       { error: "Latest news request failed" },
       { status: 502, headers: NO_STORE_HEADERS },
